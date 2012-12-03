@@ -5,7 +5,6 @@ If you have any questions in the meantime, you can email me at d@phishvids.com.
 
 ## Directory Structure
 	/docs -- docco docs
-	/lib -- generated js from src coffescript
 	/public -- public files served through express
 	/src -- coffeescript source
  	  /api -- external APIs
