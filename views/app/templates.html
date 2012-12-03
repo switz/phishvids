@@ -1,0 +1,240 @@
+<leftColumn:>
+  <div id="left-column-container">
+    <a href="/" onclick="location = '/'"><h1>Phish Vids</h1></a>
+    <br>
+    <p>
+      Welcome.
+    </p>
+    <br>
+    <p>
+      Simply choose a year, date, and song to watch Video.
+    </p>
+    <br>
+    <br>
+    <br>
+    <p>
+      This is heavily beta. If it breaks, too bad. If you want to whine to someone about it, feel free to email me at <a href="mailto:d@phishvids.com">d@phishvids.com</a>.
+    <br>
+    <br>
+    <form onsubmit='return false;'>
+      <input type="text" id="st-search-input" class="st-search-input" value={_searchInput} autocomplete=off />
+    </form>
+    <br>
+    <h3>Paste in links to upload</h3>
+    <form x-bind=submit:add id=addVideo>
+      <textarea name=video rows=10 placeholder="http://www.youtube.com/watch?v=...                                                http://www.youtube.com/watch?v=...                                                http://www.youtube.com/watch?v=...                                                http://www.youtube.com/watch?v=...">{_newVideo}</textarea><br />
+      <button class=btn type=submit>Bag It!</button>
+      <button class=btn type=submit>Tag It!</button>
+    </form>
+    <p class={_message.class}>
+      {unescaped _message.msg}
+    </p>
+  </div>
+
+<yearList:>
+  <div class=span3>
+    <div id="year-list-container">
+      <div class=ul-header>Choose a Year</div>
+      <ul>
+        {#each _years as :year}
+          <li><a class="year blue {:year} {equal(:year,_year)}" href=/{:year}>{:year}</a></li>
+        {/each}
+      </ul>
+    </div>
+  </div>
+
+<year:>
+  {#if _year}
+    <div class=span3>
+      <div id="year-container">
+        <div class=ul-header>{_year}</div>
+        <ul>
+        {#if _shows.message}
+          <li class="{_shows.class}">{_shows.message}</li>
+          {#if _shows.error}
+            <li>Please Refresh or try again later</li>
+            <li>If issue persists, <a href="mailto:help@phishvids.com" class=clear>email us</a>.</li>
+          {/if}
+        {else}
+          {#each _shows as :show}
+            <li>
+              <a class="show{#if :show.hasVideos} blue{/if} {equal(addZero(:show.month),_month)}{equal(addZero(:show.day),_day)}" href="/{_year}/{addZero(:show.month)}/{addZero(:show.day)}">
+                <span class=date>{:show.month}/{addZero(:show.day)}</span>
+                &nbsp;
+                <span class=venue>{:show.venue}</span>
+              </a>
+            </li>
+          {/each}
+          <li>
+            <a href="http://phish.net/setlists/{_year}.html" target="_blank">Open on Phish.net</a>
+          </li>
+        {/if}
+        </ul>
+      </div>
+    </div>
+  {/if}
+
+<show:>
+  {#if _day}
+    <div class=span3>
+      <div id="show-container">
+        <div class=ul-header>{_month}/{_day} {_venue}</div>
+        <ul>
+          {#with _show}
+            {#if setlist.error}
+              <li class={setlist.class}>{setlist.error}</li>
+            {else}
+              {#each setlist as :set}
+                <li class=set-title>Set {:set.key}</li>
+                {#each :set.value as :song}
+                  {#if :song.title}
+                    <li>
+                      <a class="song {:song.blue} {equal(:song.number,_number)}" href="/{_year}/{_month}/{_day}/{:song.number}">
+                        {:song.title}{#if :song.sup}<sup>{:song.sup}</sup>{/if} <span class=segue>{:song.segue}</span>
+                      </a>
+                    </li>
+                  {/if}
+                {/each}
+              {/each}
+              {#if footnotes}
+                <li class=footnotes>
+                  {unescaped footnotes}
+                </li>
+              {/if}
+              <li>
+                <a href="http://phish.net/setlists/?d={_year}-{_month}-{_day}" target=_blank>Open on Phish.net</a>
+              </li>
+            {/if}
+          {/each}
+        </ul>
+      </div>
+    </div>
+  {/if}
+
+<song:>
+  {#with _song}
+    {#if songname}
+      <div class=span3>
+        <div id="song-container">
+          <div class=ul-header>{songname}</div>
+          <ul>
+            {#if videos}
+              <li>Videos</li>
+            {/if}
+            {#each videos as :video}
+              <app:video>
+            {/each}
+            {#if audioVideos}
+              <li>Audio Only</li>
+            {/if}
+            {#each audioVideos as :video}
+              <app:video>
+            {/each}
+          </u>
+        </div>
+      </div>
+    {/if}
+  {/with}
+
+<video:>
+  <li>
+    <a href={:video.video} class="video-link blue" target=_blank>{:video.name}
+      <br />
+      <span class=info>{:video.user} - {secsToTime(:video.seconds)} - {numberWithCommas(:video.viewcount)} views</span>
+    </a>
+    <span x-bind=click:report class=report>Report</span>
+    <div class=report-actions>
+      {#if :video.update}
+        {:video.update}
+      {else}
+        Tell us what's wrong.
+        <br />
+        <a class="btn btn-small incorrect-link" x-bind=click:incorrect><i class="icon-tag"></i>Incorrect {#if :video.audioOnly}Audio{else}Video{/if}</a>
+        <a class="btn btn-small audioOnly-link" x-bind=click:audioOnly><i class="{#if :video.audioOnly}icon-film{else}icon-volume-up{/if}"></i>{#if :video.audioOnly}Video{else}Audio Only{/if}</a>
+        <a class="btn btn-small updateInfo-link" x-bind=click:updateInfo><i class="icon-download"></i>Update YouTube Data</a>
+      {/if}
+    </div>
+  </li>
+
+<validate:>
+  <div class=validate>
+    {#each _validateVideos.data as :video}
+      <div class=validate-video>
+        <h3>{:video.title}</h3>
+         <div class="setlist-approval-container left">
+          <iframe id="ytplayer" type="text/html" width="420" height="256"
+    src="http://www.youtube.com/embed/{:video.id}?autoplay=0&origin=http://phishvids.com&html5=1"
+    frameborder="0"></iframe>
+          <select name="new-video-setlist" class=multiple multiple=multiple size=11>
+            {#each :video.net.setlist as :set}
+              <option value="Set {:set.key}" disabled=disabled>Set {:set.key}</option>
+              {#each :set.value as :song}
+                {#if :song.title}
+                  <option value="{:song.number}" selected={:song.selected}>{:song.title} {:song.segue}</option>
+                {/if}
+              {/each}
+            {/each}
+          </select>
+          <div class=clear-float></div>
+          <p class=small>
+            Cmd+Click (Mac) or Ctl+Click (Windows or Linux) to select multiple songs
+          </p>
+        </div>
+        <div class="validate-confirm left">
+          <p>
+            Correct?
+          </p>
+          <button class="validate-yes-button btn" x-bind=click:confirm i={:video.i}>Yes</button><br />
+          <button class="validate-no-button btn" x-bind=click:reject i={:video.i}>No</button>
+        </div>
+        <div class=clear-float></div>
+        <div class=date-approval-container>
+          <select name=month i={:video.i} x-bind=change:update>
+            {#each _validateVideos.months as :month}
+              <option value="{:month}" selected="{equal(:month, :video.showDate.month)}">{:month}</option>
+            {/each}
+          </select> /
+          <select name=day i={:video.i} x-bind=change:update>
+            {#each _validateVideos.days as :day}
+              <option value="{:day}" selected="{equal(:day, :video.showDate.day)}">{:day}</option>
+            {/each}
+          </select> /
+          <select name=year class=year i={:video.i} x-bind=change:update>
+            {#each _validateVideos.years as :year}
+              <option value="{:year}" selected="{equal(:year, :video.showDate.year)}">{:year}</option>
+            {/each}
+          </select>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            {#if :video.net.venue}
+              {:video.net.city}, {:video.net.state} {:video.net.country} {:video.net.venue}
+            {else}
+              <span class=small>Sorry, we can't find a show on this date. If you believe this to be an error, please email us at <a href=mailto:help@phishvids.com>help@phishvids.com</a>.</span>
+            {/if}
+        </div>
+      </div>
+    {/each}
+  </div>
+
+<tiph:>
+  <div id="tiph-container">
+    <h2>Today In Phish History</h2>
+      {#if _tiph.err}
+        <br>
+        <h3 class=err>{_tiph.message}</h3>
+      {else}
+        {#each _tiph as :video}
+          <div class=tiph>
+            <a x-bind=click:expand>
+              {:video.name}
+            </a>
+            <div class=info>
+              <a x-bind=click:toVideo><i class=icon-share-alt></i></a> <a href=http://youtube.com/user/{:video.user}>{:video.user}</a> - {secsToTime(:video.seconds)} - {numberWithCommas(:video.viewcount)} views &#183; <a x-bind=click:toShow>{:video.month}/{:video.day}/{:video.year}</a>
+            </div>
+            {#if :video.view}
+              <br>
+              <iframe id="ytplayer" type="text/html" width="640" height="390" src="http://www.youtube.com/embed/{parseYouTubeURL(:video.video)}?autoplay=0&origin=http://phishvids.com&html5=1"frameborder="0"></iframe>
+            {/if}
+          </div>
+        {/each}
+      {/if}
+  </div>

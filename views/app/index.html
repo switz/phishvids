@@ -1,0 +1,61 @@
+<Title:>
+  {_title}
+
+<import: src=templates>
+
+<Head:>
+  {{#if _stTitle}}
+    <meta property='st:title' content="{{_stTitle}}" />
+  {{/if}}
+  {{#if _songname}}
+    <meta id='stsectionshow' property='st:section' content="{{_month}}/{{_day}}/{{_year}} {{_venue}}" />
+  {{else if _venue}}
+    <meta id='stsectionvenue' property='st:section' content="{{_venue}}" />
+  {{/if}}
+
+<Body:>
+  <ui:connectionAlert>
+  <div class=container-fluid id=main>
+    <div class=row-fluid>
+      <div class=span2>
+        <app:templates:leftColumn>
+      </div>
+      <div class=span10>
+        <div class=row-fluid>
+          {#if _validateVideos}
+            <app:templates:validate>
+          {else if _tiph}
+            <app:templates:tiph>
+          {else}
+            <app:templates:yearList>
+            <app:templates:year>
+            <app:templates:show>
+            <app:templates:song>
+          {/}
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- swiftype hack -->
+  <script></script>
+
+<Scripts:>
+  <script type=text/javascript src=/js/jquery.js></script>
+  <script type=text/javascript src=/js/jquery.swiftype.autocomplete.js></script>
+  <script type=text/javascript src=/js/scripts.js></script>
+  <script type=text/javascript>
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-34917555-1']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+  <script type=text/javascript src=//swiftype.com/embed.js></script>
+
+<Tail:>
+  <noscript>
+    Please enable javascript for a significantly better user experience.
+  </noscript>

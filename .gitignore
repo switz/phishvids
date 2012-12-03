@@ -1,0 +1,14 @@
+.DS_Store
+<<<<<<< HEAD
+public/gen
+lib/
+*.swp
+node_modules/
+lib/
+=======
+public/gen/*
+lib/
+!src/lib/
+*.swp
+node_modules/
+>>>>>>> 47fe0243c851bf58348879cf4f811661c66abe44

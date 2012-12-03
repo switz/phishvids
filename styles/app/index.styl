@@ -1,0 +1,350 @@
+@import "../base"
+@import "../extras"
+
+@import url(https://fonts.googleapis.com/css?family=Open\+Sans:400,600);
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url(http://themes.googleusercontent.com/static/fonts/opensans/v6/cJZKeOuBrn4kERxqtaUH3bO3LdcAZYWl9Si6vvxL-qU.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Open Sans Semibold'), local('OpenSans-Semibold'), url(https://themes.googleusercontent.com/static/fonts/opensans/v6/MTP_ySUJH_bn48VBG8sNSqRDOzjiPcYnFooOUGCOsRk.woff) format('woff');
+}
+
+/************************/
+/*         START        */
+/************************/
+
+
+// Variables
+asihtosblue = #008AB9
+
+html, body
+  height 100%
+  width 100%
+  padding 0
+  font-family: 'Open Sans', Tahoma, sans-serif;
+  background #FFF//url('http://subtlepatterns.com/patterns/norwegian_rose.png')
+
+ul, ol
+  margin 0
+
+a
+  color #090909
+
+  &:hover
+    color #97310e
+    text-decoration underline
+
+#main
+  min-width 940px
+  height 100%
+
+  a
+    text-decoration none
+
+    &:hover
+      text-decoration asihtosblue
+
+    h1
+      //color darken(asihtosblue, 10%)
+      text-decoration none
+
+  .container-fluid, .row-fluid, .row, .span10
+    height 100%
+
+  .row-fluid
+
+    .span2
+      height 100%
+      overflow-y auto
+
+      #left-column-container
+        height 100%
+
+        form
+          text-align center
+
+          textarea
+            background rgba(255,255,255,.2)
+            width 93%
+            resize none
+
+            &:focus
+              outline 1px solid asihtosblue
+              border 1px solid #EEE
+
+          button
+            margin 5px
+            width 100px
+            height 40px
+
+    .span10
+      .span3
+        height 100%
+        -webkit-box-shadow 0px 0px 2px 2px rgba(61, 61, 61, 0.1)
+        box-shadow 0px 0px 2px 2px rgba(61, 61, 61, 0.1)
+        border-left 1px solid #AAA
+        border-right 1px solid #AAA
+
+        > div
+          height 100%
+          width 100%
+          float left
+          position relative
+      .span3
+        max-width 23%
+
+      #tiph-container
+        height 100%
+        overflow-y auto
+
+        h2
+          text-align center
+
+        h3.err
+          text-align center
+
+        .tiph
+          border-bottom 1px solid #CCC
+          margin auto
+          padding 20px
+          width 750px
+
+          > a
+            font-size 1.5em
+
+          i
+            opacity .8
+
+          a, h3, .info
+            text-align left
+
+          h3
+            font-weight 600
+
+          .info, .info > a
+            color #444
+            opacity .8
+
+          iframe
+            margin auto
+            padding-bottom 30px
+            display none
+
+          .report
+            color #555
+            font-size 0.91em
+            position absolute
+            z-index 2
+            right 4px
+            bottom 10px
+            opacity .7
+
+          .report-actions
+            padding 5px
+            text-align center
+            display none
+
+            > a
+              margin 5px
+
+      .validate
+        height 100%
+        overflow-x auto
+
+
+        .validate-video
+          border-bottom 1px solid #CCC
+          padding 10px
+          margin 10px auto
+          width 750px
+
+          h3
+            margin-bottom 3px
+
+          select
+            width: 60px
+
+            &.year
+              width: 70px
+
+          .setlist-approval-container
+            width 640px
+
+            select
+              width 200px
+              margin 0 10px
+              padding 0
+              height 100%
+              float left
+
+              &:focus
+                outline 1px solid asihtosblue
+                border 1px solid #EEE
+
+            iframe
+              float left
+
+            p
+              right: 0
+              margin-left 438px
+              margin-top -33px
+
+          .validate-confirm
+            text-align center
+
+            p
+              margin 0 0 4px
+
+            button
+              height 80px
+              width 100%
+              margin 4px
+              font-size 1.83em
+              padding: 0 20px
+
+
+      div.ul-header
+        position relative
+        color #333
+        z-index 4
+        font-size 1.33em
+        //text-transform: uppercase
+        text-shadow: 0 1px 0 #fff
+        font-weight 600
+        text-align center
+        line-height 16px
+        padding 16px 0 16px 0
+        width 104%
+        left -2%
+        border 1px solid #AAA
+        background-color #F6F6F6
+        text-overflow ellipsis
+        white-space nowrap
+        overflow hidden
+        -webkit-box-shadow 0px 4px 3px -2px rgba(61, 61, 61, 0.4)
+        box-shadow 0px 4px 3px -2px rgba(61, 61, 61, 0.4)
+
+      ul
+        overflow-x hidden
+        margin 0
+        background-color #F6F6F6
+        position absolute
+        left 0
+        right 0
+        bottom 0
+        top 50px
+
+        li
+          list-style none
+          width 100%
+          border-bottom 1px solid #AAA
+          cursor pointer
+          font-size 1.1em
+          position relative
+
+          &.set-title
+            padding 5px
+
+          &.footnotes
+            padding 10px 0 0 5px
+
+          > a
+            color #555
+            height 100%
+            width auto
+            padding 10px 0px 10px 5px
+            //line-height 38px
+            text-decoration none
+            display block
+            text-overflow ellipsis
+            white-space nowrap
+            overflow hidden
+
+            &:hover
+              background #DDDDDD
+
+
+            &.blue
+              color asihtosblue
+
+            &.selected, &.true, &.truetrue
+              background asihtosblue
+              color #fff
+              //position relative
+              //z-index 3
+              //-webkit-box-shadow 0px 4px 3px -2px rgba(0, 0, 0, 0.3), 0px -4px 3px -2px rgba(0, 0, 0, 0.3)
+              //box-shadow 0px 4px 3px -2px rgba(0, 0, 0, 0.3), 0px -4px 3px -2px rgba(0, 0, 0, 0.3)
+
+            &.clear
+              padding: 0
+              width: auto
+              height: auto
+              display: inline-block
+
+            &.video-link
+              font-size 1.14em
+
+            span.segue, span.info
+              color #555
+              font-size 0.75em
+
+            span.date
+              font-size 1.3em
+
+            //span.date
+          .report
+            color #555
+            font-size 0.91em
+            position absolute
+            z-index 2
+            right 4px
+            bottom 10px
+            opacity .7
+
+            &:hover
+              opacity 1
+
+          .report-actions
+            padding 5px
+            text-align center
+            display none
+
+            > a
+              margin 5px
+
+          form
+            margin 0
+
+            input
+              margin 5px
+              width 93%
+              background transparent
+              border 1px solid rgba(0, 0, 0, .3)
+
+          .error
+            font-size 3em
+            ne-height 1em
+            padding 10px
+            color #D90F0F
+
+.small
+  font-size 0.83em
+
+.left
+  float left
+
+.clear-float
+  clear both
+
+noscript
+  position absolute
+  top 140px
+  left 20px
+  width 150px
+  background #FFF
