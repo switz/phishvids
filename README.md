@@ -27,5 +27,3 @@ To run tests please install [Webspecter](https://github.com/jgonera/webspecter) 
 
     webspecter tests/test.coffee
 
-We have to set a slightly larger timeout to handle some of my rendering bugs.
-
