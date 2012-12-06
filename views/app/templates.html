@@ -1,35 +1,35 @@
-<leftColumn:>
-  <div id="left-column-container">
-    <a href="/" onclick="location = '/'"><h1>Phish Vids</h1></a>
-    <br>
-    <p>
-      Welcome.
-    </p>
-    <br>
-    <p>
-      Simply choose a year, date, and song to watch Video.
-    </p>
-    <br>
-    <br>
-    <br>
-    <p>
-      This is heavily beta. If it breaks, too bad. If you want to whine to someone about it, feel free to email me at <a href="mailto:d@phishvids.com">d@phishvids.com</a>.
-    <br>
-    <br>
-    <form onsubmit='return false;'>
-      <input type="text" id="st-search-input" class="st-search-input" value={_searchInput} autocomplete=off />
-    </form>
-    <br>
-    <h3>Paste in links to upload</h3>
-    <form x-bind=submit:add id=addVideo>
-      <textarea name=video rows=10 placeholder="http://www.youtube.com/watch?v=...                                                http://www.youtube.com/watch?v=...                                                http://www.youtube.com/watch?v=...                                                http://www.youtube.com/watch?v=...">{_newVideo}</textarea><br />
-      <button class=btn type=submit>Bag It!</button>
-      <button class=btn type=submit>Tag It!</button>
-    </form>
-    <p class={_message.class}>
-      {unescaped _message.msg}
-    </p>
-  </div>
+<header:>
+  <header>
+    <ul class=left>
+      <li class=home-container>
+        <a class=home href="/">PhishVids</a>
+      </li>
+      <li class=search-container>
+        <form onsubmit='return false;'>
+          <input type="text" id="st-search-input" class="st-search-input" value={_searchInput} autocomplete=off />
+        </form>
+      </li>
+    </ul>
+    <ul class=right>
+      <li class="{#if _about}active{/if}">
+        <a class="{#if _about}active{/if}" href="/about">ABOUT</a>
+      </li>
+      <li class="{#if _tiph}active{/if}">
+        <a class="{#if _tiph}active{/if}" href="/tiph">TIPH</a>
+      </li>
+      <li class=add-container>
+        <a href="#" x-bind=click:addClick>ADD</a>
+        <div class=add-form-container>
+          <form x-bind=submit:add id=addVideo>
+            <textarea name=video rows=10 placeholder="http://www.youtube.com/watch?v=...                                                http://www.youtube.com/watch?v=...                                                http://www.youtube.com/watch?v=...                                                http://www.youtube.com/watch?v=...">{_newVideo}</textarea><br />
+            <button class=btn type=submit>Bag It!</button>
+            <button class=btn type=submit>Tag It!</button>
+          </form>
+        </div>
+      </li>
+    </ul>
+    <div class=clear-float></div>
+  </header>
 
 <yearList:>
   <div class=span3>
@@ -98,7 +98,9 @@
               {/each}
               {#if footnotes}
                 <li class=footnotes>
-                  {unescaped footnotes}
+                  <p>
+                    {unescaped footnotes}
+                  </p>
                 </li>
               {/if}
               <li>
@@ -216,25 +218,58 @@
   </div>
 
 <tiph:>
-  <div id="tiph-container">
-    <h2>Today In Phish History</h2>
-      {#if _tiph.err}
-        <br>
-        <h3 class=err>{_tiph.message}</h3>
-      {else}
-        {#each _tiph as :video}
-          <div class=tiph>
-            <a x-bind=click:expand>
-              {:video.name}
-            </a>
-            <div class=info>
-              <a x-bind=click:toVideo><i class=icon-share-alt></i></a> <a href=http://youtube.com/user/{:video.user}>{:video.user}</a> - {secsToTime(:video.seconds)} - {numberWithCommas(:video.viewcount)} views &#183; <a x-bind=click:toShow>{:video.month}/{:video.day}/{:video.year}</a>
+  <div class=page>
+    <div id="tiph-container">
+      <h2>Today In Phish History</h2>
+        {#if _tiph.err}
+          <br>
+          <h3 class=err>{_tiph.message}</h3>
+        {else}
+          {#each _tiph as :video}
+            <div class=tiph>
+              <a x-bind=click:expand>
+                {:video.name}
+              </a>
+              <div class=info>
+                <a href=/{:video.year}/{addZero(:video.month)}/{addZero(:video.day)}/{addZero(:video.number)}><i class=icon-share-alt></i></a> <a href=http://youtube.com/user/{:video.user}>{:video.user}</a> - {secsToTime(:video.seconds)} - {numberWithCommas(:video.viewcount)} views &#183; <a href=/{:video.year}/{addZero(:video.month)}/{addZero(:video.day)}>{:video.month}/{:video.day}/{:video.year}</a>
+              </div>
+              {#if :video.view}
+                <br>
+                <iframe id="ytplayer" type="text/html" width="640" height="390" src="http://www.youtube.com/embed/{parseYouTubeURL(:video.video)}?autoplay=0&origin=http://phishvids.com&html5=1"frameborder="0"></iframe>
+              {/if}
             </div>
-            {#if :video.view}
-              <br>
-              <iframe id="ytplayer" type="text/html" width="640" height="390" src="http://www.youtube.com/embed/{parseYouTubeURL(:video.video)}?autoplay=0&origin=http://phishvids.com&html5=1"frameborder="0"></iframe>
-            {/if}
-          </div>
-        {/each}
-      {/if}
+          {/each}
+        {/if}
+    </div>
+  </div>
+
+<about:>
+ <div class=page>
+   <div id=about-container>
+      <h2>About</h2>
+      <p>
+        Welcome to my little corner of the internet. It's nice to see you again.
+      </p>
+      <p>
+        This website came about after my attendance of the 2010 NYE run at Madison Square Garden. I wanted to watch video from the run, but it was quite hard to traverse YouTube for good videos.
+      </p>
+      <p>
+        So, I set out to build a website to accomplish just that. Nearly two years later, here we are sitting on pV 2.0.
+      </p>
+      <p>
+        Thanks to people like mkdevo, silverchair, harpuafsb, telekinetica, lazylightning, duanebase, and plenty of others without whom this website would not be possible. It's a collective effort between the community of Phish. That is, the fans.
+      </p>
+      <p>
+        I'd also like to say thank you to Parker Harrington, Scotty Bernstein, Adam Scheinberg, Scott Marks, Nate Douglas, and everyone else who's a contributing member of this network. It's one of the oldest band-related fan groups within the internet. It's nothing short of magical, all fueled by four dudes and a light guy's creative spirit.
+      </p>
+      <br>
+      <p>
+        If you have any comments, suggestions, or problems with the website, feel free to email me at <a href=mailto:d@phishvids.com>d@phishvids.com</a>. Just like Phish, we try to push the limits technically, even when we don't have to. We're using a very young framework, which will lead to bugs and even a subpar user experience at times. Please let me know if you have any issues so we can fix them for future users.
+      </p>
+      <p>
+        Thank you for using the website.
+        <br />
+        -Daniel Saewitz
+      </p>
+    </div>
   </div>

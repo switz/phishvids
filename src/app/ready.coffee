@@ -18,21 +18,6 @@ module.exports = ready (model) ->
 
   model.setNull '_years', config.YEAR_ARRAY
 
-  # If user loads /2010/10/20 show them /2010 as well and so on
-  $(document).ready ->
-    setTimeout ->
-      m = month.get()
-      d = day.get()
-      y = year.get()
-      n = number.get()
-
-      if m > 0 and d > 0
-        view.history.replace "/#{y}"
-        view.history.replace "/#{y}/#{m}/#{d}"
-        if n > 0
-          view.history.replace "/#{y}/#{m}/#{d}/#{n}"
-    , 500
-
   app.on 'render', (ctx) ->
     PhishVids()
     _gaq.push ['_trackPageview', window.location.pathname]
@@ -75,6 +60,9 @@ module.exports = ready (model) ->
             show.i = i++
             shows.push show
             if i is data.length
+              $('.add-form-container').slideUp()
+              model.set '_isFront', false
+              model.del m for m in ['_month','_day','_number','_show','_song','_tiph','_year','_shows','_about','_validateVideos']
               validateVideos.set
                 data: shows
                 years: config.YEAR_ARRAY
@@ -93,7 +81,6 @@ module.exports = ready (model) ->
     unless show.net then return false
     setlistObj = show.net.setlistObj
     songnames = {}
-
     for i of setlistObj
       setlistObj[i].map (song) ->
         if song.selected
@@ -217,6 +204,7 @@ module.exports = ready (model) ->
     putInfo 'updateInfo', params, (json) ->
       video.set json
       video.set 'update', 'Thanks!'
+      console.log video.path(), video.get()
       setTimeout ->
         $report.slideUp ->
           video.del('update')
@@ -230,20 +218,14 @@ module.exports = ready (model) ->
     else
       $(el).siblings('iframe').slideUp -> video.set 'view', false
     return false
-  app.toVideo = (e, el, next) ->
-    video = model.at el
-    m = video.get('month')
-    d = video.get('day')
-    y = video.get('year')
-    n = video.get('number')
-    window.location = "#{y}/#{addZero(m)}/#{addZero(d)}/#{addZero(n)}"
-  app.toShow = (e, el, next) ->
-    video = model.at el
-    m = video.get('month')
-    d = video.get('day')
-    y = video.get('year')
-    window.location = "#{y}/#{addZero(m)}/#{addZero(d)}"
-
+  app.addClick = (e, el) ->
+    $add = $('.add-form-container')
+    if $add.is(':visible')
+      $add.slideUp()
+        .siblings('a').removeClass 'active'
+    else
+      $add.slideDown()
+        .siblings('a').addClass 'active'
 
   # Exported functions are exposed as a global in the browser with the same
   # name as the module that includes Derby. They can also be bound to DOM

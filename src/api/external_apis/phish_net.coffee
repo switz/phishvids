@@ -1,4 +1,4 @@
-API_KEY = '866BE6611D4D74A4BB98'
+API_KEY = require('../config').phishnetAPI
 API_URL = 'api.phish.net/api.js'
 METHOD  = 'pnet.shows.setlists.get'
 

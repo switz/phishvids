@@ -16,23 +16,21 @@
 <Body:>
   <ui:connectionAlert>
   <div class=container-fluid id=main>
-    <div class=row-fluid>
-      <div class=span2>
-        <app:templates:leftColumn>
-      </div>
-      <div class=span10>
-        <div class=row-fluid>
-          {#if _validateVideos}
-            <app:templates:validate>
-          {else if _tiph}
-            <app:templates:tiph>
-          {else}
-            <app:templates:yearList>
-            <app:templates:year>
-            <app:templates:show>
-            <app:templates:song>
-          {/}
-        </div>
+    <app:templates:header>
+    <div class=main-container>
+      <div class=row-fluid>
+        {#if _validateVideos}
+          <app:templates:validate>
+        {else if _tiph}
+          <app:templates:tiph>
+        {else if _about}
+          <app:templates:about>
+        {else}
+          <app:templates:yearList>
+          <app:templates:year>
+          <app:templates:show>
+          <app:templates:song>
+        {/}
       </div>
     </div>
   </div>

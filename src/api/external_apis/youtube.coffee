@@ -10,7 +10,7 @@ youtubeRequestUrl = (id) ->
   params =
     v   : API_VERSION
     alt : API_FORMAT
-    key : 'AI39si5bIHypsjH4oRpew0JP4DObpnfJY_N3BsGevJA3oQcD9_Dv06sCpk-tFmh5khj-oyZP_y6WTsfO-XEtBLPEZR_ZbxwjXg'
+    key : require('../config').youtubeAPI
 
   "http://#{ API_URL }/#{ id }?#{ toParam(params) }"
 

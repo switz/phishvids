@@ -4,7 +4,6 @@ express = require 'express'
 gzippo = require 'gzippo'
 derby = require 'derby'
 app = require '../app'
-config = require './config'
 serverError = require './serverError'
 io = require('derby/node_modules/racer').io
 
@@ -20,7 +19,7 @@ store = module.exports.pvStore = derby.createStore
   listen: server
   db:
     type: 'Mongo'
-    uri: config.uri
+    uri: process.env.pv_uri
     safe: true
 
 ONE_YEAR = 1000 * 60 * 60 * 24 * 365
@@ -55,21 +54,20 @@ expressApp
 
 ## Routes
 
-functions = require './functions'
+controller = require './controller'
 
-expressApp.post '/api/v1/video/youtube', functions.api.v1.video.youtube.POST
-expressApp.post '/api/v1/video/add', functions.api.v1.video.add.POST
-expressApp.put '/api/v1/video/incorrect', functions.api.v1.video.incorrect.PUT
-expressApp.put '/api/v1/video/audioOnly', functions.api.v1.video.audioOnly.PUT
-expressApp.put '/api/v1/video/updateInfo', functions.api.v1.video.updateInfo.PUT
-expressApp.all '/status', functions.status
-expressApp.all '*', functions.all
+expressApp.post '/api/v1/video/youtube', controller.api.v1.video.youtube.POST
+expressApp.post '/api/v1/video/add', controller.api.v1.video.add.POST
+expressApp.put '/api/v1/video/incorrect', controller.api.v1.video.incorrect.PUT
+expressApp.put '/api/v1/video/audioOnly', controller.api.v1.video.audioOnly.PUT
+expressApp.put '/api/v1/video/updateInfo', controller.api.v1.video.updateInfo.PUT
+expressApp.all '/status', controller.status
+expressApp.all '*', controller.all
 
 queries = require './queries'
 
-# to stop from the memory leak warnings
-# temporary fix until I figure out a solution to stop it from breaking
-# process.setMaxListeners(0)
+# Infinite stack trace
+Error.stackTraceLimit = Infinity
 
 if process.env.NODE_ENV is "production"
   io.configure ->
