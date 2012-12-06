@@ -1,7 +1,5 @@
 .DS_Store
 public/gen/*
-lib/
-!src/lib/
 *.swp
 node_modules/
-
+src/api/config.json
