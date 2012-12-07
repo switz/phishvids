@@ -7,7 +7,7 @@
   {{#if _stTitle}}
     <meta property='st:title' content="{{_stTitle}}" />
   {{/if}}
-  {{#if _songname}}
+  {{#if _song.songname}}
     <meta id='stsectionshow' property='st:section' content="{{_month}}/{{_day}}/{{_year}} {{_venue}}" />
   {{else if _venue}}
     <meta id='stsectionvenue' property='st:section' content="{{_venue}}" />
