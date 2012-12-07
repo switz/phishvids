@@ -27,7 +27,7 @@ controller =
 
 module.exports = controller
 
-# ready callback
+# import ready callback
 require './ready'
 
 # import view functions
