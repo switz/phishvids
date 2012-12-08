@@ -204,7 +204,6 @@ module.exports = ready (model) ->
     putInfo 'updateInfo', params, (json) ->
       video.set json
       video.set 'update', 'Thanks!'
-      console.log video.path(), video.get()
       setTimeout ->
         $report.slideUp ->
           video.del('update')

@@ -1,13 +1,37 @@
 (function ($) {
+  var queryParser = function (a) {
+      var i, p, b = {};
+      if (a === "") {
+        return {};
+      }
+      for (i = 0; i < a.length; i += 1) {
+        p = a[i].split('=');
+        if (p.length === 2) {
+          b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+        }
+      }
+      return b;
+    };
+  $.queryParams = function () {
+    return queryParser(window.location.search.substr(1).split('&'));
+  };
+  $.hashParams = function () {
+    return queryParser(window.location.hash.substr(1).split('&'));
+  };
+
+
   var ident = 0;
 
   window.Swiftype = window.Swiftype || {};
-  Swiftype.root_url = 'https://api.swiftype.com';
+  Swiftype.root_url = Swiftype.root_url || 'https://api.swiftype.com';
   Swiftype.pingUrl = function(endpoint, callback) {
-    var img  = new Image();
-    img.onload = img.onerror = callback;
+    var to = setTimeout(callback, 350);
+    var img = new Image();
+    img.onload = img.onerror = function() {
+      clearTimeout(to);
+      callback();
+    };
     img.src = endpoint;
-    setTimeout(callback, 350);
     return false;
   };
   Swiftype.pingAutoSelection = function(engineKey, docId, value, callback) {
@@ -20,33 +44,43 @@
     var url = Swiftype.root_url + '/api/v1/public/analytics/pas?' + $.param(params);
     Swiftype.pingUrl(url, callback);
   };
+  Swiftype.findSelectedSection = function() {
+    var sectionText = $.hashParams().sts;
+    if (!sectionText) { return; }
+
+    function normalizeText(str) {
+      var out = str.replace(/\s+/g, '');
+      out = out.toLowerCase();
+      return out;
+    }
+
+    sectionText = normalizeText(sectionText);
+
+    $('h1, h2, h3, h4, h5, h6').each(function(idx) {
+      $this = $(this);
+      if (normalizeText($this.text()).indexOf(sectionText) >= 0) {
+        this.scrollIntoView(true);
+        return false;
+      }
+    });
+  };
+
+  Swiftype.htmlEscape = Swiftype.htmlEscape || function htmlEscape(str) {
+    return String(str).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  };
 
   $.fn.swiftype = function (options) {
+    Swiftype.findSelectedSection();
     var options = $.extend({}, $.fn.swiftype.defaults, options);
 
     return this.each(function () {
       var $this = $(this);
       var config = $.meta ? $.extend({}, options, $this.data()) : options;
       $this.attr('autocomplete', 'off');
-      $this.data('swiftype-config', config);
+      $this.data('swiftype-config-autocomplete', config);
       $this.submitted = false;
       $this.cache = new LRUCache(10);
       $this.emptyQueries = [];
-
-      $this.computeDropdownStyles = function() {
-        var $attachEl = config.attachTo ? $(config.attachTo) : $this;
-        var offset = $attachEl.offset();
-        var styles = {
-          'position': 'absolute',
-          'z-index': 9999,
-          'top': offset.top + $attachEl.outerHeight() + 1,
-          'left': offset.left
-        };
-        if (config.setWidth) {
-          styles['width'] = $attachEl.outerWidth() - 2;
-        }
-        return styles;
-      }
 
       $this.isEmpty = function(query) {
         return $.inArray(normalize(query), this.emptyQueries) >= 0
@@ -56,8 +90,12 @@
         $this.emptyQueries.unshift(normalize(query));
       };
 
-      var styles = $this.computeDropdownStyles();
-      var $list = $('<' + config.suggestionListType + ' />').addClass(config.suggestionListClass).appendTo('body').hide().css(styles);
+      var styles = config.dropdownStylesFunction($this);
+      var $swiftypeWidget = $('<div class="swiftype-widget" />');
+      var $listContainer = $('<div />').addClass(config.suggestionListClass).appendTo($swiftypeWidget).css(styles).hide();
+      $swiftypeWidget.appendTo('body');
+      var $list = $('<' + config.suggestionListType + ' />').appendTo($listContainer);
+
       $this.data('swiftype-list', $list);
 
       $this.abortCurrent = function() {
@@ -66,8 +104,19 @@
         }
       };
 
-      $this.hideList = function() {
-        setTimeout(function() { $list.hide(); }, 10);
+      $this.showList = function() {
+        if (handleFunctionParam(config.disableAutocomplete) === false) {
+          $listContainer.show();
+        }
+      };
+
+
+      $this.hideList = function(sync) {
+        if (sync) {
+          $listContainer.hide();
+        } else {
+          setTimeout(function() { $listContainer.hide(); }, 10);
+        }
       };
 
       $this.focused = function() {
@@ -134,6 +183,7 @@
         };
       };
 
+
       var typingDelayPointer;
       var suppressKey = false;
       $this.lastValue = '';
@@ -157,7 +207,7 @@
       });
 
       $this.styleDropdown = function() {
-        $list.css($this.computeDropdownStyles());
+        $listContainer.css(config.dropdownStylesFunction($this));
       };
 
       $this.keydown(function (event) {
@@ -231,7 +281,7 @@
       $this.focus(function () {
         setTimeout(function() { $this.select() }, 10);
         if ($this.listResults().filter(':not(.' + config.noResultsClass + ')').length > 0) {
-          $list.show();
+          $this.showList();
         }
       });
     });
@@ -245,22 +295,10 @@
     $this.abortCurrent();
 
     var params = {},
-      config = $this.data('swiftype-config');
+      config = $this.data('swiftype-config-autocomplete');
 
     params['q'] = term;
     params['engine_key'] = config.engineKey;
-
-    function handleFunctionParam(field) {
-      if (field !== undefined) {
-        var evald = field;
-        if (typeof evald === 'function') {
-          evald = evald.call();
-        }
-        return evald;
-      }
-      return undefined;
-    }
-
     params['search_fields'] = handleFunctionParam(config.searchFields);
     params['fetch_fields'] = handleFunctionParam(config.fetchFields);
     params['filters'] = handleFunctionParam(config.filters);
@@ -282,7 +320,8 @@
         $this.cache.put(norm, data.records);
       } else {
         $this.addEmpty(norm);
-        $this.data('swiftype-list').empty().hide();
+        $this.data('swiftype-list').empty();
+        $this.hideList();
         return;
       }
       processData($this, data.records, term);
@@ -292,7 +331,8 @@
   var getResults = function($this, term) {
     var norm = normalize(term);
     if ($this.isEmpty(norm)) {
-      $this.data('swiftype-list').empty().hide();
+      $this.data('swiftype-list').empty();
+      $this.hideList();
       return;
     }
     var cached = $this.cache.get(norm);
@@ -311,19 +351,22 @@
       }
       $this.lastValue = term;
       if ($.trim(term) === '') {
-        $this.data('swiftype-list').empty().hide();
+        $this.data('swiftype-list').empty()
+        $this.hideList();
         return;
       }
-      if (typeof $this.data('swiftype-config').engineKey !== 'undefined') {
+      if (typeof $this.data('swiftype-config-autocomplete').engineKey !== 'undefined') {
         getResults($this, term);
       }
     };
 
   var processData = function ($this, data, term) {
       var $list = $this.data('swiftype-list'),
-        config = $this.data('swiftype-config');
+        config = $this.data('swiftype-config-autocomplete');
 
-      $list.empty().hide();
+      $list.empty();
+      $this.hideList(true);
+
       config.resultRenderFunction($this.getContext(), data);
 
       var totalItems = $this.listResults().length;
@@ -331,7 +374,7 @@
         if ($this.submitted) {
           $this.submitted = false;
         } else {
-          $list.show();
+          $this.showList();
         }
       }
     };
@@ -347,25 +390,48 @@
     });
   };
 
-  function htmlEscape(str) {
-    return String(str).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  }
-
   var defaultRenderFunction = function(document_type, item) {
-    return '<p class="title">' + htmlEscape(item['title']) + '</p>';
+    return '<p class="title">' + Swiftype.htmlEscape(item['title']) + '</p>';
   };
 
   var defaultOnComplete = function(item, prefix) {
     window.location = item['url'];
   };
 
-	// simple client-side LRU Cache, based on https://github.com/rsms/js-lru
+  var defaultDropdownStylesFunction = function($this) {
+    var config = $this.data('swiftype-config-autocomplete');
+    var $attachEl = config.attachTo ? $(config.attachTo) : $this;
+    var offset = $attachEl.offset();
+    var styles = {
+      'position': 'absolute',
+      'z-index': 9999,
+      'top': offset.top + $attachEl.outerHeight() + 1,
+      'left': offset.left
+    };
+    if (config.setWidth) {
+      styles['width'] = $attachEl.outerWidth() - 2;
+    }
+    return styles;
+  };
 
-	function LRUCache(limit) {
-	  this.size = 0;
-	  this.limit = limit;
-	  this._keymap = {};
-	}
+  var handleFunctionParam = function(field) {
+    if (field !== undefined) {
+      var evald = field;
+      if (typeof evald === 'function') {
+        evald = evald.call();
+      }
+      return evald;
+    }
+    return undefined;
+  };
+
+  // simple client-side LRU Cache, based on https://github.com/rsms/js-lru
+
+  function LRUCache(limit) {
+    this.size = 0;
+    this.limit = limit;
+    this._keymap = {};
+  }
 
   LRUCache.prototype.put = function (key, value) {
     var entry = {
@@ -475,12 +541,14 @@
     onComplete: defaultOnComplete,
     resultRenderFunction: defaultResultRenderFunction,
     renderFunction: defaultRenderFunction,
+    dropdownStylesFunction: defaultDropdownStylesFunction,
     resultLimit: undefined,
     suggestionListType: 'ul',
-    suggestionListClass: 'st-autocomplete',
+    suggestionListClass: 'autocomplete',
     resultListSelector: 'li',
     setWidth: true,
-    typingDelay: 80
+    typingDelay: 80,
+    disableAutocomplete: false
   };
 
 })(jQuery);

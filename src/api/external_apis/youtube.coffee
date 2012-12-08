@@ -22,6 +22,7 @@ youtubeRequestUrl = (id) ->
 #
 get = (id, callback) ->
   request = new Request(youtubeRequestUrl(id))
+
   request.done (response) ->
     callback JSON.parse(response)
 
