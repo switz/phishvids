@@ -80,11 +80,11 @@
       <div id="show-container">
         <div class=ul-header>{_month}/{_day} {_venue}</div>
         <ul>
-          {#with _show}
-            {#if setlist.error}
-              <li class={setlist.class}>{setlist.error}</li>
+          {#with _show as :show}
+            {#if :show.setlist.error}
+              <li class={setlist.class}>{:show.setlist.error}</li>
             {else}
-              {#each setlist as :set}
+              {#each :show.setlist as :set}
                 <li class=set-title>Set {:set.key}</li>
                 {#each :set.value as :song}
                   {#if :song.title}
@@ -107,29 +107,29 @@
                 <a href="http://phish.net/setlists/?d={_year}-{_month}-{_day}" target=_blank>Open on Phish.net</a>
               </li>
             {/if}
-          {/each}
+          {/with}
         </ul>
       </div>
     </div>
   {/if}
 
 <song:>
-  {#with _song}
-    {#if songname}
+  {#with _song as :song}
+    {#if :song.songname}
       <div class=span3>
         <div id="song-container">
-          <div class=ul-header>{songname}</div>
+          <div class=ul-header>{:song.songname}</div>
           <ul>
-            {#if videos}
+            {#if :song.videos}
               <li>Videos</li>
             {/if}
-            {#each videos as :video}
+            {#each :song.videos as :video}
               <app:video>
             {/each}
-            {#if audioVideos}
+            {#if :song.audioVideos}
               <li>Audio Only</li>
             {/if}
-            {#each audioVideos as :video}
+            {#each :song.audioVideos as :video}
               <app:video>
             {/each}
           </u>

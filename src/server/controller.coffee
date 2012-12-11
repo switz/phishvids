@@ -166,7 +166,7 @@ module.exports.api =
               res.json video
       updateInfo:
         PUT: (req, res) ->
-          youtubeID = parseYouTubeURL(sanitize(req.body.url).xss()).id
+          youtubeID = parseYouTubeURL(sanitize(req.body.url || '').xss()).id
           YoutubeAPI.get youtubeID, (json) ->
             return res.send {err: true} unless json
             video =

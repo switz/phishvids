@@ -164,7 +164,7 @@ module.exports = ready (model) ->
     $report = $(el).closest('.report-actions')
     return unless $report.length
     # anchor tag
-    video = model.at '_song.' + model.at($report.siblings('a.video-link')[0]).path()
+    video = model.at $report.siblings('a.video-link')[0]
     params =
       id: video.get 'id'
 
@@ -179,7 +179,7 @@ module.exports = ready (model) ->
     $report = $(el).closest('.report-actions')
     return unless $report.length
     # anchor tag
-    video = model.at '_song.' + model.at($report.siblings('a.video-link')[0]).path()
+    video = model.at $report.siblings('a.video-link')[0]
 
     params =
       id: video.get 'id'
@@ -189,19 +189,22 @@ module.exports = ready (model) ->
       setTimeout ->
         $report.siblings('.report').fadeIn()
         $report.slideUp ->
+          $report.parent().slideUp()
           video.del('update')
       , 800
   app.updateInfo = (e, el, next) ->
+    console.log el, model.at(el)
     $report = $(el).closest('.report-actions')
     $link = $report.siblings('a.video-link')
     return unless $report.length || $link.length
     # anchor tag
-    video = model.at '_song.' + model.at($link[0]).path()
+    video = model.at $link[0]
     params =
       id: video.get 'id'
       url: video.get 'video'
 
     putInfo 'updateInfo', params, (json) ->
+      $link.parent().remove()
       video.set json
       video.set 'update', 'Thanks!'
       setTimeout ->
