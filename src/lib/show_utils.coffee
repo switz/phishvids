@@ -63,7 +63,7 @@ getShow = (show, callback) ->
     callback undefined, show, json
 
 compareTitleToSetlist = (setlist, title) ->
-  title = title.replace(/[^a-zA-Z -]/, "").toLowerCase()
+  title = title.replace(/[^a-zA-Z -]/g, '').toLowerCase()
   for i of setlist
     for j of setlist[i]
       if title.indexOf(setlist[i][j].title.replace(/[^a-zA-Z -]/,'').toLowerCase()) >= 0
