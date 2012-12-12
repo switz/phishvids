@@ -66,7 +66,7 @@ compareTitleToSetlist = (setlist, title) ->
   title = title.replace(/[^a-zA-Z -]/g, '').toLowerCase()
   for i of setlist
     for j of setlist[i]
-      if title.indexOf(setlist[i][j].title.replace(/[^a-zA-Z -]/,'').toLowerCase()) >= 0
+      if title.indexOf(setlist[i][j].title.replace(/[^a-zA-Z -]/g,'').toLowerCase()) >= 0
         setlist[i][j].selected = true
   setlist
 
