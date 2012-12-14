@@ -8,15 +8,9 @@ If you have any questions in the meantime, you can email me at d@phishvids.com.
 	/src -- coffeescript source
  	  /api -- external APIs
 	  /app -- derby app
-	    functions -- route functions "controller"
-	    index -- setup
-	    routes -- routes
 	  /extras -- extraneous scripts
 	  /lib -- external modules
 	  /server -- server files (express, derby server)
-	  	index -- setup
-	  	queries -- derby queries
-	  	functions -- route functions
 	/styles -- stylus css
 	/ui -- derby components
 	/views - derby html templates
@@ -24,9 +18,7 @@ If you have any questions in the meantime, you can email me at d@phishvids.com.
 ## Tests
 To run tests please install [Webspecter](https://github.com/jgonera/webspecter) and then execute the following command
 
-	  webspecter tests/test.coffee
-
-We have to set a slightly larger timeout to handle some of my rendering bugs.
+    webspecter tests/test.coffee
 
 ## Config
 This will not run without a file at `src/api/config.json`.
