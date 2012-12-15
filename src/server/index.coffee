@@ -13,6 +13,8 @@ expressApp = express()
 server = module.exports = http.createServer expressApp
 
 derby.use derby.logPlugin
+derby.use(require('racer-journal-redis'))
+derby.use(require('racer-pubsub-redis'))
 derby.use require('racer-db-mongo')
 
 store = module.exports.pvStore = derby.createStore
@@ -21,6 +23,10 @@ store = module.exports.pvStore = derby.createStore
     type: 'Mongo'
     uri: process.env.pv_uri
     safe: true
+  journal:
+    type: 'Redis'
+  pubsub:
+    type: 'Redis'
 
 ONE_YEAR = 1000 * 60 * 60 * 24 * 365
 root = path.dirname path.dirname __dirname

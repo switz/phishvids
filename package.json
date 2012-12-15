@@ -13,7 +13,9 @@
     "validator": "~0.4.13",
     "mocha": "~1.6.0",
     "should": "~1.2.1",
-    "async": "~0.1.22"
+    "async": "~0.1.22",
+    "racer-journal-redis": "~0.3.11",
+    "racer-pubsub-redis": "~0.3.11"
   },
   "private": true,
   "devDependencies": {
