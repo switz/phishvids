@@ -194,7 +194,6 @@ functions.song = (page, model, params) ->
       songname = videoModelGet[0].songname
       model.set '_song.songname', songname
       songname += ' '
-      model.set '_venue', videoModelGet[0].venue
       # Set local videos model to videos without audio
       model.set '_song.videos', videoModel.filter({where:{'audioOnly':false}}).get()
       model.set '_song.audioVideos', videoModel.filter({where:{'audioOnly': true}}).get()

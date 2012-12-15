@@ -76,47 +76,60 @@
 
 <show:>
   {#if _day}
-    <div class=span3>
-      <div id="show-container">
-        <div class=ul-header>{_month}/{_day} {_venue}</div>
-        <ul>
-          {#with _show as :show}
+    {#with _show as :show}
+      <div class="span3 span-show">
+        <div class="show-container">
+          <div class=ul-header>{_month}/{_day}</div>
+          <ul>
             {#if :show.setlist.error}
               <li class={setlist.class}>{:show.setlist.error}</li>
             {else}
-              {#each :show.setlist as :set}
-                <li class=set-title>Set {:set.key}</li>
-                {#each :set.value as :song}
-                  {#if :song.title}
-                    <li>
-                      <a class="song {:song.blue} {equal(:song.number,_number)}" href="/{_year}/{_month}/{_day}/{:song.number}">
-                        {:song.title}{#if :song.sup}<sup>{:song.sup}</sup>{/if} <span class=segue>{:song.segue}</span>
-                      </a>
-                    </li>
-                  {/if}
-                {/each}
-              {/each}
-              {#if footnotes}
-                <li class=footnotes>
-                  <p>
-                    {unescaped footnotes}
-                  </p>
-                </li>
-              {/if}
+              {#with :show.setlist.0 as :set}
+                <app:set>
+              {/with}
               <li>
                 <a href="http://phish.net/setlists/?d={_year}-{_month}-{_day}" target=_blank>Open on Phish.net</a>
               </li>
             {/if}
-          {/with}
-        </ul>
+          </ul>
+        </div>
       </div>
-    </div>
+      <div class="span3 span-show">
+        <div class=show-container>
+          <div class=ul-header>{_venue}</div>
+          <ul>
+            {#with :show.setlist.1 as :set}
+              <app:set>
+            {/with}
+            {#if footnotes}
+              <li class=footnotes>
+                <p>
+                  {unescaped footnotes}
+                </p>
+              </li>
+            {/if}
+          </ul>
+        </div>
+      </div>
+    {/with}
   {/if}
 
+<set:>
+  <li class=set-title>Set {:set.key}</li>
+  {#each :set.value as :song}
+    {#if :song.title}
+      <li>
+        <a class="song {:song.blue} {equal(:song.number,_number)}" href="/{_year}/{_month}/{_day}/{:song.number}">
+          {:song.title}{#if :song.sup}<sup>{:song.sup}</sup>{/if} <span class=segue>{:song.segue}</span>
+        </a>
+      </li>
+    {/if}
+  {/each}
+
 <song:>
-  {#with _song as :song}
-    {#if :song.songname}
-      <div class=span3>
+  {#if _number}
+    {#with _song as :song}
+      <div class=span6>
         <div id="song-container">
           <div class=ul-header>{:song.songname}</div>
           <ul>
@@ -135,12 +148,12 @@
           </u>
         </div>
       </div>
-    {/if}
-  {/with}
+    {/with}
+  {/if}
 
 <video:>
   <li>
-    <a href={:video.video} class="video-link blue" target=_blank>{:video.name}
+    <a href=http://i.ytimg.com/vi/{parseYouTubeURL(:video.video)}/0.jpg class="video-link blue" target=_blank>{:video.name}
       <br />
       <span class=info>{:video.user} - {secsToTime(:video.seconds)} - {numberWithCommas(:video.viewcount)} views</span>
     </a>
