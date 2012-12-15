@@ -143,11 +143,10 @@ functions.show = (page, model, params, callback) ->
       # Converts object to array of objects with { key : value }
       # TODO: Come up with a cleaner and more robust solution in the future
       # TODO: Check for encore
-      for x of setlistObj
-        if setlistObj.hasOwnProperty x
-          setlist.push
-            key : x,
-            value : setlistObj[x]
+      for own x of setlistObj
+        setlist.push
+          key : x,
+          value : setlistObj[x]
 
       # Set related local models
       if setlist
@@ -195,8 +194,8 @@ functions.song = (page, model, params) ->
       model.set '_song.songname', songname
       songname += ' '
       # Set local videos model to videos without audio
-      model.set '_song.videos', videoModel.filter({where:{'audioOnly':false}}).get()
-      model.set '_song.audioVideos', videoModel.filter({where:{'audioOnly': true}}).get()
+      model.set '_song.videos', videoModel.filter({where:{'audioOnly':false}}).sort(['viewcount', 'desc']).get()
+      model.set '_song.audioVideos', videoModel.filter({where:{'audioOnly': true}}).sort(['viewcount', 'desc']).get()
     else
       songname = ''
       model.set '_song.songname', songname

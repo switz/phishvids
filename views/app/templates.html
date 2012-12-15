@@ -131,7 +131,10 @@
     {#with _song as :song}
       <div class=span6>
         <div id="song-container">
-          <div class=ul-header>{:song.songname}</div>
+          <h2>{:song.songname}</h2>
+          <iframe id="ytplayer" type="text/html" width="420" height="256"
+    src="http://www.youtube.com/embed/{parseYouTubeURL(:song.videos.1.video)}?autoplay=0&origin=http://phishvids.com&html5=1"
+    frameborder="0"></iframe>
           <ul>
             {#if :song.videos}
               <li>Videos</li>
@@ -145,7 +148,7 @@
             {#each :song.audioVideos as :video}
               <app:video>
             {/each}
-          </u>
+          </ul>
         </div>
       </div>
     {/with}
@@ -153,9 +156,10 @@
 
 <video:>
   <li>
-    <a href=http://i.ytimg.com/vi/{parseYouTubeURL(:video.video)}/0.jpg class="video-link blue" target=_blank>{:video.name}
-      <br />
-      <span class=info>{:video.user} - {secsToTime(:video.seconds)} - {numberWithCommas(:video.viewcount)} views</span>
+    <a href={:video.video} class="video-link blue" target=_blank>
+      <img src="http://i.ytimg.com/vi/{parseYouTubeURL(:video.video)}/0.jpg" />
+      <br/>
+      {:video.user}
     </a>
     <span x-bind=click:report class=report>Report</span>
     <div class=report-actions>
