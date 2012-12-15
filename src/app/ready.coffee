@@ -8,7 +8,7 @@ config = require './config'
 ## Ready
 #############
 
-module.exports = ready (model) ->
+ready (model) ->
   month = model.at '_month'
   day = model.at '_day'
   year = model.at '_year'
@@ -18,12 +18,12 @@ module.exports = ready (model) ->
 
   model.setNull '_years', config.YEAR_ARRAY
 
-  app.on 'render', (ctx) ->
+  @on 'render', (ctx) ->
     PhishVids()
     _gaq.push ['_trackPageview', window.location.pathname]
 
   # TODO: Refactor add/update into one function
-  app.add = ->
+  @add = ->
     data = newVideo.get()?.replace(/[ \t]+/g,'')?.split('\n')
 
     $.ajax
@@ -73,7 +73,7 @@ module.exports = ready (model) ->
         model.set '_message',
           msg: jqXHR.responseText.err
 
-  app.confirm = (e, el, next) ->
+  @confirm = (e, el, next) ->
     $el = $(el)
     showModel = model.at($el.parent().siblings('h3')[0])
     show = showModel.get()
@@ -101,14 +101,14 @@ module.exports = ready (model) ->
           if validateVideos.get().data.length is 0
             validateVideos.del()
 
-  app.reject = (e, el, next) ->
+  @reject = (e, el, next) ->
     $el = $(el)
     s = model.at($el.parent().siblings('h3')[0])
 
     $el.parents('.validate-video').slideUp 600, ->
       $('.validate-video').show()
       s.remove()
-  app.update = (e, el, next) ->
+  @update = (e, el, next) ->
     $el = $(el)
     s = model.at($el.parent().siblings('h3')[0])
     show = s.get()
@@ -143,7 +143,7 @@ module.exports = ready (model) ->
 
         s.set show
 
-  app.report = (e, el, next) ->
+  @report = (e, el, next) ->
     $a = $(el).siblings('a.video-link')
     return unless $a.length
     video = model.at $a[0]
@@ -152,7 +152,7 @@ module.exports = ready (model) ->
 
     $(el).siblings('.report-actions').slideDown()
 
-  app.hideReport = (e, el, next) ->
+  @hideReport = (e, el, next) ->
     $el = $(el)
     $r = $el.siblings('.report-actions:visible')
     return next() unless $r.length
@@ -160,7 +160,7 @@ module.exports = ready (model) ->
 
     return false
 
-  app.incorrect = (e, el, next) ->
+  @incorrect = (e, el, next) ->
     $report = $(el).closest('.report-actions')
     return unless $report.length
     # anchor tag
@@ -175,7 +175,7 @@ module.exports = ready (model) ->
         $report.slideUp -> $report.closest('li').slideUp 'slow', ->
           video.del('update')
       , 800
-  app.audioOnly = (e, el, next) ->
+  @audioOnly = (e, el, next) ->
     $report = $(el).closest('.report-actions')
     return unless $report.length
     # anchor tag
@@ -192,7 +192,7 @@ module.exports = ready (model) ->
           $report.parent().slideUp()
           video.del('update')
       , 800
-  app.updateInfo = (e, el, next) ->
+  @updateInfo = (e, el, next) ->
     console.log el, model.at(el)
     $report = $(el).closest('.report-actions')
     $link = $report.siblings('a.video-link')
@@ -211,7 +211,7 @@ module.exports = ready (model) ->
         $report.slideUp ->
           video.del('update')
       , 800
-  app.expand = (e, el, next) ->
+  @expand = (e, el, next) ->
     video = model.at el
 
     unless video.get('view')
@@ -220,7 +220,7 @@ module.exports = ready (model) ->
     else
       $(el).siblings('iframe').slideUp -> video.set 'view', false
     return false
-  app.addClick = (e, el) ->
+  @addClick = (e, el) ->
     $add = $('.add-form-container')
     if $add.is(':visible')
       $add.slideUp()
@@ -232,25 +232,25 @@ module.exports = ready (model) ->
   # Exported functions are exposed as a global in the browser with the same
   # name as the module that includes Derby. They can also be bound to DOM
   # events using the "x-bind" attribute in a template.
-  exports.stop = ->
+  @stop = ->
     _gaq.push(['_trackEvent', 'User', 'Stability', 'Connected', false])
     # Any path name that starts with an underscore is private to the current
     # client. Nothing set under a private path is synced back to the server.
     model.set '_stopped', true
 
-  do exports.start = ->
+  do @start = ->
     _gaq.push(['_trackEvent', 'User', 'Stability', 'Connected', true])
     model.set '_stopped', false
 
   model.set '_showReconnect', true
-  exports.connect = ->
+  @connect = ->
     _gaq.push(['_trackEvent', 'User', 'Stability', 'Reconnected', true])
     # Hide the reconnect link for a second after clicking it
     model.set '_showReconnect', false
     setTimeout (-> model.set '_showReconnect', true), 1000
     model.socket.socket.connect()
 
-  exports.reload = -> window.location.reload()
+  @reload = -> window.location.reload()
 
 putInfo = (name, params, callback) ->
   $.ajax

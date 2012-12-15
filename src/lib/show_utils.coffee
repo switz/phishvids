@@ -60,7 +60,7 @@ getShow = (show, callback) ->
   PhishAPI.get showDate, (json) ->
     if json is undefined or json.success is 0
       return callback("Could not find a show on <em>#{addZero(show.showDate.month)}/#{addZero(show.showDate.day)}/#{show.showDate.year}</em>. (Or Phish.net is down)", show)
-    callback undefined, show, json
+    callback null, show, json
 
 compareTitleToSetlist = (setlist, title) ->
   title = title.replace(/[^a-zA-Z -]/g, '').toLowerCase()

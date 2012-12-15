@@ -189,7 +189,7 @@ module.exports.status = (req, res) ->
   res.json obj
 
 module.exports.all = (req, res) ->
-  res.send 404, '404 Jennifer Dances - oops'
+  res.send 404, '404 Page not found'
 
 module.exports.switchcam = (req, res) ->
   month = req.params.month
