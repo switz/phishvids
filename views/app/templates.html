@@ -78,7 +78,7 @@
   {#if _day}
     {#with _show as :show}
       <div class="span3 span-show">
-        <div class="show-container">
+        <div class=show-container>
           <div class=ul-header>{_month}/{_day}</div>
           <ul>
             {#if :show.setlist.error}
@@ -96,12 +96,13 @@
       </div>
       <div class="span3 span-show">
         <div class=show-container>
-          <div class=ul-header>{_venue}</div>
+          <div class=ul-header>{#if _venue}{_venue}{else}&nbsp;{/if}</div>
           <ul>
             {#with :show.setlist.1 as :set}
               <app:set>
             {/with}
             {#if footnotes}
+              <li>Setlist Notes</li>
               <li class=footnotes>
                 <p>
                   {unescaped footnotes}
