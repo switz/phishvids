@@ -133,18 +133,13 @@
         <div id="song-container">
           <h2>{:song.songname}</h2>
           <iframe id="ytplayer" type="text/html" width="420" height="256"
-    src="http://www.youtube.com/embed/{parseYouTubeURL(:song.videos.1.video)}?autoplay=0&origin=http://phishvids.com&html5=1"
+    src="http://www.youtube.com/embed/{parseYouTubeURL(:song.videos.0.video)}?autoplay=0&origin=http://phishvids.com&html5=1"
     frameborder="0"></iframe>
+          <h3>{:song.videos.0.name}</h3>
           <ul>
-            {#if :song.videos}
-              <li>Videos</li>
-            {/if}
             {#each :song.videos as :video}
               <app:video>
             {/each}
-            {#if :song.audioVideos}
-              <li>Audio Only</li>
-            {/if}
             {#each :song.audioVideos as :video}
               <app:video>
             {/each}
