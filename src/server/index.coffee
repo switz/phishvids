@@ -1,7 +1,6 @@
 http = require 'http'
 path = require 'path'
 express = require 'express'
-gzippo = require 'gzippo'
 derby = require 'derby'
 app = require '../app'
 serverError = require './serverError'
