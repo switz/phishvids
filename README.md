@@ -1,3 +1,5 @@
+[![build status](https://secure.travis-ci.org/switz/phishvids.png)](http://travis-ci.org/switz/phishvids)
+
 # PhishVids
 
 ## More here soon!
