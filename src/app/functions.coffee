@@ -185,7 +185,6 @@ functions.song = (page, model, params) ->
   model.set '_day', addZero day
   model.set '_number', addZero number
   model.set '_isServer', onServer()
-  console.log onServer()
 
   # Fetch mongodb query
   model.fetch model.query('videos').getVideos(year, month, day, number), (err, videoModel) ->
@@ -204,7 +203,8 @@ functions.song = (page, model, params) ->
       songname += ' '
     else
       songname = ''
-      model.set '_song.songname', songname
+      model.set '_song',
+        song: songname
 
     model.set '_title', "#{songname}#{month}/#{day}/#{year} | Phish Videos"
     model.set '_stTitle', "#{songname}"
