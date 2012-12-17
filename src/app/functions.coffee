@@ -170,6 +170,10 @@ functions.show = (page, model, params, callback) ->
 functions.song = (page, model, params) ->
   model.set '_isFront', true
 
+  model.set '_song',
+    error: 'Loading...'
+    class: ''
+
   year = +params[0]
   month = +params[1]
   day = +params[2]
@@ -180,6 +184,8 @@ functions.song = (page, model, params) ->
   model.set '_month', addZero month
   model.set '_day', addZero day
   model.set '_number', addZero number
+  model.set '_isServer', onServer()
+  console.log onServer()
 
   # Fetch mongodb query
   model.fetch model.query('videos').getVideos(year, month, day, number), (err, videoModel) ->
@@ -191,11 +197,11 @@ functions.song = (page, model, params) ->
 
     if videoModelGet?.length > 0
       songname = videoModelGet[0].songname
-      model.set '_song.songname', songname
+      model.set '_song',
+        songname: songname
+        videos: videoModel.filter({where:{'audioOnly':false}}).sort(['viewcount', 'desc']).get()
+        audioVideos: videoModel.filter({where:{'audioOnly': true}}).sort(['viewcount', 'desc']).get()
       songname += ' '
-      # Set local videos model to videos without audio
-      model.set '_song.videos', videoModel.filter({where:{'audioOnly':false}}).sort(['viewcount', 'desc']).get()
-      model.set '_song.audioVideos', videoModel.filter({where:{'audioOnly': true}}).sort(['viewcount', 'desc']).get()
     else
       songname = ''
       model.set '_song.songname', songname
@@ -203,6 +209,6 @@ functions.song = (page, model, params) ->
     model.set '_title', "#{songname}#{month}/#{day}/#{year} | Phish Videos"
     model.set '_stTitle', "#{songname}"
 
-    page.render 'index'
+    page.render 'song'
 
 module.exports = functions

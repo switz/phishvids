@@ -22,6 +22,13 @@ ready (model) ->
     PhishVids()
     _gaq.push ['_trackPageview', window.location.pathname]
 
+  @on 'render:song', (ctx) ->
+    $span = $('.span-show')
+    if $span.height() isnt "40%"
+      $span.animate
+        height: "40%"
+      , 'slow'
+
   # TODO: Refactor add/update into one function
   @add = ->
     data = newVideo.get()?.replace(/[ \t]+/g,'')?.split('\n')
