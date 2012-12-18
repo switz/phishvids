@@ -150,7 +150,9 @@ functions.show = (page, model, params, callback) ->
 
       # Set related local models
       if setlist
-        show.set 'setlist', setlist
+        show.set 'setlist',
+          0: setlist.shift()
+          1: setlist
         show.set 'footnotes', footnotes
         show.set 'venue', json.venue
         model.set '_venue', json.venue
@@ -170,7 +172,9 @@ functions.show = (page, model, params, callback) ->
 functions.song = (page, model, params) ->
   model.set '_isFront', true
 
-  model.set '_song',
+  _song = model.at '_song'
+
+  _song.set
     error: 'Loading...'
     class: ''
 
@@ -196,14 +200,14 @@ functions.song = (page, model, params) ->
 
     if videoModelGet?.length > 0
       songname = videoModelGet[0].songname
-      model.set '_song',
+      _song.set
         songname: songname
         videos: videoModel.filter({where:{'audioOnly':false}}).sort(['viewcount', 'desc']).get()
         audioVideos: videoModel.filter({where:{'audioOnly': true}}).sort(['viewcount', 'desc']).get()
       songname += ' '
     else
       songname = ''
-      model.set '_song',
+      _song.set
         song: songname
 
     model.set '_title', "#{songname}#{month}/#{day}/#{year} | Phish Videos"
