@@ -2,16 +2,16 @@ http = require 'http'
 path = require 'path'
 express = require 'express'
 derby = require 'derby'
+racer = require 'derby/node_modules/racer'
 app = require '../app'
 serverError = require './serverError'
-io = require('derby/node_modules/racer').io
+io = racer.io
 
 ## SERVER CONFIGURATION ##
 
 expressApp = express()
 server = module.exports = http.createServer expressApp
 
-derby.use derby.logPlugin
 derby.use require('racer-db-mongo')
 
 store = module.exports.pvStore = derby.createStore
@@ -68,12 +68,14 @@ queries = require './queries'
 # Infinite stack trace
 Error.stackTraceLimit = Infinity
 
+io.configure 'production', ->
+  io.set "transports", ["websocket", "flashsocket", "xhr-polling", "jsonp-polling", "htmlfile"]
+
 if process.env.NODE_ENV is "production"
-  io.configure ->
-    io.enable "browser client etag"
-    io.set "log level", 2
-    io.set "transports", ["websocket", "flashsocket", "xhr-polling", "jsonp-polling", "htmlfile"]
   # If error is thrown, don't crash the server
   process.on 'uncaughtException', (err) ->
     console.log err.stack
     console.log "Node NOT Exiting..."
+else
+  racer.use(racer.logPlugin)
+  derby.use(derby.logPlugin)
