@@ -1,7 +1,7 @@
 {
   "name": "PhishVids",
   "description": "",
-  "version": "0.0.1-32",
+  "version": "0.0.1-35",
   "main": "./phishvids.js",
   "dependencies": {
     "derby": "git://github.com/switz/derby.git",
