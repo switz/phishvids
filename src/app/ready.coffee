@@ -200,7 +200,6 @@ ready (model) ->
           video.del('update')
       , 800
   @updateInfo = (e, el, next) ->
-    console.log el, model.at(el)
     $report = $(el).closest('.report-actions')
     $link = $report.siblings('a.video-link')
     return unless $report.length || $link.length
