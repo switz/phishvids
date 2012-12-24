@@ -132,7 +132,6 @@ module.exports.api =
               del: false
               audioOnly: false
 
-            console.log v
             new Video(v).save()
 
             t =
