@@ -168,18 +168,6 @@
       <br/>
       {:video.user}
     </a>
-    <span x-bind=click:report class=report>Report</span>
-    <div class=report-actions>
-      {#if :video.update}
-        {:video.update}
-      {else}
-        Tell us what's wrong.
-        <br />
-        <a class="btn btn-small incorrect-link" x-bind=click:incorrect><i class="icon-tag"></i>Incorrect {#if :video.audioOnly}Audio{else}Video{/if}</a>
-        <a class="btn btn-small audioOnly-link" x-bind=click:audioOnly><i class="{#if :video.audioOnly}icon-film{else}icon-volume-up{/if}"></i>{#if :video.audioOnly}Video{else}Audio Only{/if}</a>
-        <a class="btn btn-small updateInfo-link" x-bind=click:updateInfo><i class="icon-download"></i>Update YouTube Data</a>
-      {/if}
-    </div>
   </li>
 
 <validate:>

@@ -2,7 +2,7 @@
 { addZero } = require '../lib/utils'
 
 # View Functions
-view.fn 'addZero', (num) -> addZero num
+view.fn 'addZero', addZero
 
 view.fn 'secsToTime', (secs) ->
   minutes = Math.floor(secs / 60)
@@ -14,7 +14,7 @@ view.fn 'numberWithCommas', (str) ->
 
 view.fn 'parseYouTubeURL', (url) ->
   getParm = (url, base) ->
-    re = new RegExp("(\\?|&)" + base + "\\=([^&]*)(&|$)")
+    re = new RegExp("(\\?|&)#{base}\\=([^&]*)(&|$)")
     matches = url.match(re)
     if matches
       matches[2]
