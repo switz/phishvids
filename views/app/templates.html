@@ -77,7 +77,7 @@
 <show:>
   {#if _day}
     {#with _show as :show}
-      <div class="span3 span-show" style="height:{#if _isServer}40{else}100{/if}%">
+      <div class="span3 span-show" style="height:{#if or(_isServer,_songUrl)}40{else}100{/if}%">
         <div class=show-container>
           <div class=ul-header>{_month}/{_day}</div>
           <ul>
@@ -94,7 +94,7 @@
           </ul>
         </div>
       </div>
-      <div class="span3 span-show" style="{#if _isServer}height:40%;{/if}">
+      <div class="span3 span-show" style="{#if or(_isServer,_songUrl)}height:40%;{/if}">
         <div class=show-container>
           <div class=ul-header>{#if _venue}{_venue}{else}&nbsp;{/if}</div>
           <ul>

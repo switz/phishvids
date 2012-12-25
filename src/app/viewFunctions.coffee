@@ -24,3 +24,6 @@ view.fn 'parseYouTubeURL', (url) ->
   matches = undefined
   if url && url.indexOf("youtube.com/watch") isnt -1
     return getParm(url, "v")
+
+view.fn 'or', (one, two) ->
+  return !!(one || two)

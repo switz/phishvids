@@ -15,14 +15,17 @@ ready (model) ->
   number = model.at '_number'
   newVideo = model.at '_newVideo'
   validateVideos = model.at '_validateVideos'
+  songUrl = model.at '_songUrl'
 
   model.setNull '_years', config.YEAR_ARRAY
 
   @on 'render', (ctx) ->
+    songUrl.set false
     PhishVids()
     _gaq.push ['_trackPageview', window.location.pathname]
 
   @on 'render:song', (ctx) ->
+    songUrl.set true
     $span = $('.span-show')
     if $span.height() isnt "40%"
       $span.animate
