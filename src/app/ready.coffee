@@ -27,10 +27,7 @@ ready (model) ->
   @on 'render:song', (ctx) ->
     songUrl.set true
     $span = $('.span-show')
-    if $span.height() isnt "40%"
-      $span.animate
-        height: "40%"
-      , 'slow'
+    
 
   # TODO: Refactor add/update into one function
   @add = ->

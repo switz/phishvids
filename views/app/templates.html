@@ -77,7 +77,7 @@
 <show:>
   {#if _day}
     {#with _show as :show}
-      <div class="span3 span-show" style="height:{#if or(_isServer,_songUrl)}40{else}100{/if}%">
+      <div class="span3 span-show {#if or(_isServer,_songUrl)}forty{/if}">
         <div class=show-container>
           <div class=ul-header>{_month}/{_day}</div>
           <ul>
@@ -94,7 +94,7 @@
           </ul>
         </div>
       </div>
-      <div class="span3 span-show" style="{#if or(_isServer,_songUrl)}height:40%;{/if}">
+      <div class="span3 span-show {#if or(_isServer,_songUrl)}forty{/if}">
         <div class=show-container>
           <div class=ul-header>{#if _venue}{_venue}{else}&nbsp;{/if}</div>
           <ul>
@@ -141,9 +141,7 @@
           {else if :song.videos}
             <h2 class=song>{:song.videos.0.name}</h2>
             <div class=player>
-              <iframe id="ytplayer" type="text/html" width="420" height="256"
-      src="http://www.youtube.com/embed/{parseYouTubeURL(:song.videos.0.video)}?autoplay=0&origin=http://phishvids.com&html5=1"
-      frameborder="0"></iframe>
+              <iframe id="ytplayer" type="text/html" width="420" height="256" src="http://www.youtube.com/embed/{parseYouTubeURL(:song.videos.0.video)}?autoplay=0&origin=http://phishvids.com&html5=1" frameborder="0"></iframe>
               <ul id=thumbnails>
                 <li class=left x-bind=hover:scroll>&lt;</li>
                 {#each :song.videos as :video}
@@ -166,7 +164,7 @@
 <video:>
   <li>
     <a href={:video.video} class="video-link blue" target=_blank>
-      <img src="http://i.ytimg.com/vi/{parseYouTubeURL(:video.video)}/0.jpg" />
+      <img src="http://i.ytimg.com/vi/{parseYouTubeURL(:video.video)}/0.jpg" alt="" />
       <br/>
       {:video.user}
     </a>
