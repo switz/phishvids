@@ -310,12 +310,14 @@ a
 
       .span6
         height 60%
-        overflow auto
+        overflow hidden
 
         #song-container
+          position relative
 
           h2.song
             color #333
+            position absolute
             z-index 98
             font-size 1.33em
             //text-transform: uppercase
@@ -335,43 +337,49 @@ a
 
           .player
             text-align center
-            padding 20px
+            padding 60px 20px
 
-          ul
+            ul
+              height 140px
+              width 100%
 
-            li
-              list-style none
-              float left
-              padding 10px
+              li
+                list-style none
+                float left
+                display inline-block
+                padding 10px
 
-              .report
-                color #555
-                font-size 0.91em
-                position absolute
-                z-index 2
-                right 4px
-                bottom 10px
-                opacity .7
+                &.left, &.right
+                  height 100%
 
-                &:hover
-                  opacity 1
+                .report
+                  color #555
+                  font-size 0.91em
+                  position absolute
+                  z-index 2
+                  right 4px
+                  bottom 10px
+                  opacity .7
 
-              .report-actions
-                padding 5px
-                text-align center
-                display none
+                  &:hover
+                    opacity 1
+
+                .report-actions
+                  padding 5px
+                  text-align center
+                  display none
+
+                  > a
+                    margin 5px
 
                 > a
-                  margin 5px
 
-              > a
+                  &.video-link
+                    font-size 1.14em
 
-                &.video-link
-                  font-size 1.14em
-
-                  img
-                   height 110px
-                   width 146px
+                    img
+                     height 110px
+                     width 146px
 
     .page
       padding 10px 10px 50px 10px

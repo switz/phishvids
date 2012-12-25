@@ -144,15 +144,17 @@
               <iframe id="ytplayer" type="text/html" width="420" height="256"
       src="http://www.youtube.com/embed/{parseYouTubeURL(:song.videos.0.video)}?autoplay=0&origin=http://phishvids.com&html5=1"
       frameborder="0"></iframe>
+              <ul id=thumbnails>
+                <li class=left x-bind=hover:scroll>&lt;</li>
+                {#each :song.videos as :video}
+                  <app:video>
+                {/each}
+                {#each :song.audioVideos as :video}
+                  <app:video>
+                {/each}
+                <li class=right x-bind=hover:scroll>&gt;</li>
+              </ul>
             </div>
-            <ul>
-              {#each :song.videos as :video}
-                <app:video>
-              {/each}
-              {#each :song.audioVideos as :video}
-                <app:video>
-              {/each}
-            </ul>
           {else}
             <h2 class=song>No videos for this song</h2>
           {/if}

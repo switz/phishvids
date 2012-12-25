@@ -2,6 +2,7 @@
   {_title}
 
 <import: src=templates>
+<import: src=scripts>
 
 <Head:>
   {{#if _stTitle}}
@@ -37,21 +38,8 @@
   <!-- swiftype hack -->
   <script></script>
 
-<Scripts:>
-  <script type=text/javascript src=/js/jquery.js></script>
-  <script type=text/javascript src=/js/jquery.swiftype.autocomplete.js></script>
-  <script type=text/javascript src=/js/scripts.js></script>
-  <script type=text/javascript>
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-34917555-1']);
+<app:scripts:Scripts>
 
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
-  <script type=text/javascript src=//swiftype.com/embed.js></script>
 
 <Tail:>
   <noscript>

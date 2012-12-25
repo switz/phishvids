@@ -234,6 +234,11 @@ ready (model) ->
     else
       $add.slideDown()
         .siblings('a').addClass 'active'
+  @scroll = (e, el) ->
+    # If left, subtract one from margin-left, otherwise add 1
+    c = $(el).attr('class')
+    diff = if c is 'left' then "-1" else "+1"
+    $('#thumbnails').css "margin-left", diff
 
   # Exported functions are exposed as a global in the browser with the same
   # name as the module that includes Derby. They can also be bound to DOM
