@@ -26,8 +26,6 @@ ready (model) ->
 
   @on 'render:song', (ctx) ->
     songUrl.set true
-    $span = $('.span-show')
-    
 
   # TODO: Refactor add/update into one function
   @add = ->

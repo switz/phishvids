@@ -33,8 +33,9 @@ class Request
   fire: (data) ->
     request = http.request(@options, @_handler)
     request.on 'error', (err) =>
-      for callback in @callbacks['fail']
-        callback(err)
+      if @callbacks['fail'].length
+        for callback in @callbacks['fail']
+          callback(err)
 
     # Send data with request
     if data
