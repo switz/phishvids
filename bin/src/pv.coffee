@@ -6,7 +6,6 @@ mongoose = require 'mongoose'
 Schema = mongoose.Schema
 
 mongoose.connect process.env.pv_uri_ext
-console.log process.env.pv_uri_ext
 
 ## SCHEMA ##
 
@@ -60,10 +59,7 @@ program
 
 program
   .command('year [year]')
-  .description('''
-    \nCreate a new Derby project. If no directory name is specified, or the
-    name `.` is used, the project will be created in the current directory.
-    A name for the default app may be specified optionally.''')
+  .description('\nUpdate the year list for a particular year. If no year is provided, 2012 will be default.')
   .action(getShows)
 
 program.parse process.argv
