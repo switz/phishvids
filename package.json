@@ -1,7 +1,7 @@
 {
   "name": "PhishVids",
   "description": "Search Phish Videos by Year, Show, and Setlist.",
-  "version": "1.0",
+  "version": "1.0.0",
   "main": "./phishvids.js",
   "dependencies": {
     "derby": "git://github.com/codeparty/derby.git#master",
