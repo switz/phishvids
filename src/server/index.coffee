@@ -60,7 +60,7 @@ queries = require './queries'
 Error.stackTraceLimit = Infinity
 
 io.configure 'production', ->
-  io.set "transports", ["websocket", "xhr-polling", "jsonp-polling", "htmlfile"]
+  io.set "transports", ["xhr-polling", "jsonp-polling", "htmlfile"]
 
 if process.env.NODE_ENV is "production"
   # If error is thrown, don't crash the server
