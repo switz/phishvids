@@ -53,17 +53,17 @@ functions.about = (page, model) ->
 functions.year = (page, model, params, callback) ->
   model.set '_isFront', true
 
-  model.set '_shows',
-    message: 'Loading...'
-    error: false
-    class: ''
-
   year = +params[0]
 
   # Clear unmatched columns
   model.del m for m in ['_month','_day','_number','_show','_song']
 
   model.set '_year', year
+
+  model.set '_shows',
+    message: 'Loading...'
+    error: false
+    class: ''
 
   model.fetch model.query('years').getYearsShows(year), (err, yearModel) ->
     if err
