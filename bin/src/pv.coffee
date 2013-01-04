@@ -25,6 +25,7 @@ Year = mongoose.model 'Year', yearSchema
 ## FUNCTIONS ##
 
 showDateToDate = (showDate) ->
+  # showDate is in the format of 2012-12-31
   [year, month, day] = showDate.split('-')
   return {year, month, day}
 
@@ -49,8 +50,6 @@ getShows = (year = 2012) ->
       setTimeout ->
         process.exit(0)
       , 1000
-
-
 
 ## CLI ##
 
