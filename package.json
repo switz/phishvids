@@ -4,8 +4,8 @@
   "version": "1.0.0",
   "main": "./phishvids.js",
   "dependencies": {
-    "derby": "git://github.com/codeparty/derby.git#master",
-    "racer": "git://github.com/codeparty/racer.git#master",
+    "derby": "https://github.com/codeparty/derby/tarball/master",
+    "racer": "https://github.com/codeparty/racer/tarball/master",
 
     "express": "3.0.4",
     "coffee-script": ">=1.3.3",
