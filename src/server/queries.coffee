@@ -9,7 +9,7 @@ store.readPathAccess 'videos.*', () -> #captures, next) ->
 ## Query Motifs
 
 store.query.expose 'years', 'getYearsShows', (year) ->
-  @where('year').equals(year).except 'shows.setlist'
+  @where('year').equals(year)
 
 store.query.expose 'videos', 'checkIfVideosExist', (year) ->
   @where('year').equals(year)

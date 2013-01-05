@@ -77,7 +77,7 @@ functions.year = (page, model, params, callback) ->
         error: true
         class: 'error'
     else if yearModelGet[0].shows
-      model.ref '_shows', yearModelGet[0].shows || []
+      model.set '_shows', yearModelGet[0].shows || []
 
     model.set '_title', "#{year} Phish Videos"
     model.set '_stTitle', year
