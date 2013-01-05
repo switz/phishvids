@@ -8,7 +8,7 @@ Schema = mongoose.Schema
 
 { addZero } = require '../../src/lib/utils'
 
-mongoose.connect process.env.pv_uri
+mongoose.connect process.env.pv_uri_ext
 
 ## SCHEMA ##
 
