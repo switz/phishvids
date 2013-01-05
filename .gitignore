@@ -2,5 +2,5 @@
 public/gen/*
 *.swp
 node_modules/
-#src/api/config.json
+src/api/config.json
 
