@@ -1,5 +1,6 @@
 program = require 'derby/node_modules/commander'
 async = require 'async'
+jsdom = require 'jsdom'
 PhishAPI = require '../../src/api/external_apis/phish_net'
 
 mongoose = require 'mongoose'
@@ -9,12 +10,22 @@ mongoose.connect process.env.pv_uri_ext
 
 ## SCHEMA ##
 
+songSchema = new Schema
+  name: String
+  segue: String
+  sup: String
+
+setlistSchema = new Schema
+  number: String
+  songs: [songSchema]
+
 showSchema = new Schema
   month: Number
   day: Number
   venue: String
   showid: Number
   hasVideos: Boolean
+  setlist: [setlistSchema]
 
 yearSchema = new Schema
   year: Number
@@ -31,13 +42,15 @@ showDateToDate = (showDate) ->
 
 cleanShow = (item, callback) ->
   date = showDateToDate item.showdate
-  show =
-    month: +date.month
-    day: +date.day
-    venue: item.venue
-    showid: +item.showid
-    hasVideos: false
-  callback null, show
+  getSetlist item, (setlist) ->
+    show =
+      month: +date.month
+      day: +date.day
+      venue: item.venue
+      showid: +item.showid
+      hasVideos: false
+      setlist: setlist
+    callback null, show
 
 getShows = (year = 2012) ->
   PhishAPI.getYear year, (json) ->
@@ -50,6 +63,37 @@ getShows = (year = 2012) ->
       setTimeout ->
         process.exit(0)
       , 1000
+
+getSetlist = (show, callback) ->
+  PhishAPI.get show.showdate, (json) ->
+    jsdom.env json.setlistdata, ["http://code.jquery.com/jquery.js"], (err, window) ->
+      $ = window.$
+      setlist = []
+      $('.pnetset').each ->
+        $this = $(@)
+        number = $this.children('.pnetsetlabel').text().replace(/(?:\:|Set ([0-9]):)/, '$1')
+        set =
+          number: number
+          songs: []
+        $this.children('a').each ->
+          sup = ''
+          if $(this).next().is('sup')
+            sup = $(this).next().text().replace(/\[([0-9]{1,2})\]/, '$1')
+            segue = $(this.nextSibling.nextSibling).text()
+          else
+            segue = $(this.nextSibling).text()
+          switch segue
+            when '-' then segue = '->'
+            when ' ' then segue = '>'
+            else segue = ','
+          song =
+            name: $(this).text()
+            sup: sup
+            segue: segue
+          set.songs.push song
+        setlist.push set
+      callback setlist
+
 
 ## CLI ##
 
