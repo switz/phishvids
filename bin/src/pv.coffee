@@ -127,7 +127,6 @@ cleanShowForSetlist = (item, callback) ->
     new Setlist(show).save()
     callback()
 
-
 getSetlists = (year = 2012) ->
   PhishAPI.getYear year, (json) ->
     async.forEach json, cleanShowForSetlist, (err) ->
@@ -135,7 +134,6 @@ getSetlists = (year = 2012) ->
       setTimeout ->
         process.exit(0)
       , 1000
-
 
 ## CLI ##
 
