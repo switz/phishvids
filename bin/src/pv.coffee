@@ -6,7 +6,9 @@ PhishAPI = require '../../src/api/external_apis/phish_net'
 mongoose = require 'mongoose'
 Schema = mongoose.Schema
 
-mongoose.connect process.env.pv_uri_ext
+{ addZero } = require '../../src/lib/utils'
+
+mongoose.connect process.env.pv_uri
 
 ## SCHEMA ##
 
@@ -14,6 +16,7 @@ songSchema = new Schema
   name: String
   segue: String
   sup: String
+  number: String
 
 setSchema = new Schema
   number: String
@@ -81,9 +84,10 @@ getSetlist = (show, callback) ->
       $ = window.$
       setlist = []
       json.footnotes = $('.pnetfootnotes').html()
+      num = 1
       $('.pnetset').each ->
         $this = $(@)
-        number = $this.children('.pnetsetlabel').text().replace(/(?:\:|Set ([0-9]):)/, '$1')
+        number = $this.children('.pnetsetlabel').text().replace ':', ''
         set =
           number: number
           songs: []
@@ -98,13 +102,14 @@ getSetlist = (show, callback) ->
           switch segue
             when ' -' then segue = '->'
             when ' ' then segue = '>'
-            else segue = ','
+            else segue = ''
           if window.last.isEqualNode $(this)[0]
             segue = ''
           song =
             name: $(this).text()
             sup: sup
             segue: segue
+            number: addZero num++
           set.songs.push song
         setlist.push set
       callback setlist, json

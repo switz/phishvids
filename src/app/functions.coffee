@@ -108,57 +108,28 @@ functions.show = (page, model, params, callback) ->
   model.set '_month', addZero month
   model.set '_day', addZero day
 
-  # Run query against the Phish.net API
-  showDate = "#{year}-#{addZero month}-#{addZero day}"
-  PhishAPI.get showDate, (json) ->
-    unless json || json.setlistdata
-      show.set 'setlist'
-        error: config.error.phishnet
-        class: 'error'
-      return -1
+  model.fetch model.query('setlists').getSetlist(year, month, day), (err, setlistModel) ->
+    if err then console.error "Query error: #{err}"
 
-    showid = parseInt json.showid, 10
-    show.set 'showid', showid
+    setlistModelGet = setlistModel.get()[0]
 
-    # Grab footnotes
-    footnotes = json.setlistdata.split(/<p class='pnetfootnotes'>/)?[1]
+    unless setlistModelGet then return page.render 'index'
 
-    blue = {}
+    showid = setlistModelGet.showid
 
     model.fetch model.query('videos').checkIfVideosExistForSetlist(showid), (err, videoModel) ->
-      if err
-        console.error "Query error: #{err}"
+      if err then console.error "Query error: #{err}"
 
       videoModelGet = videoModel.get()
 
-      if videoModelGet
-        for video in videoModelGet
-          blue[video.number] = 'blue'
-
-      setlist = []
-      # fixSegue will take each song and replace previous song with it's segue and sup
-      setlistObj = fixSegue jsonToSetlist(json, blue)
-
-      # Just a crappy hack to satisfy Derby templating
-      # Converts object to array of objects with { key : value }
-      # TODO: Come up with a cleaner and more robust solution in the future
-      # TODO: Check for encore
-      for x of setlistObj
-        if setlistObj.hasOwnProperty x
-          setlist.push
-            key : x,
-            value : setlistObj[x]
-
       # Set related local models
-      if setlist
-        show.set 'setlist', setlist
-        show.set 'footnotes', footnotes
-        show.set 'venue', json.venue
-        model.set '_venue', json.venue
-      else
-        show.set 'setlist',
-          error: 'Phish.net API could not be reached. Please try again later.'
-          class: 'error'
+      if videoModelGet and setlistModelGet
+        blue = {}
+        for video in videoModelGet
+          blue[addZero video.number] = true
+
+        model.set '_blue', blue
+        show.set setlistModelGet
 
       model.set '_title', "#{month}/#{day}/#{year} | Phish Videos"
       model.set '_stTitle', "#{month}/#{day}/#{year}"

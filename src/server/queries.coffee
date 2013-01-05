@@ -32,6 +32,12 @@ store.query.expose 'videos', 'tiph', ->
   @where('month').equals(today.getMonth()+1)
   .where('day').equals(today.getDate())
 
+store.query.expose 'setlists', 'getSetlist', (year, month, day) ->
+  @where('year').equals(year)
+  .where('month').equals(month)
+  .where('day').equals(day)
+  .one
+
 ## Give query access
 
 giveQueryAccess = (col, fn) ->
@@ -42,6 +48,7 @@ giveQueryAccess = (col, fn) ->
 obj =
   years: ['getYearsShows']
   videos: ['checkIfVideosExist', 'checkIfVideosExistForSetlist', 'getVideos', 'tiph']
+  setlists: ['getSetlist']
 
 for col of obj
   obj[col].map (fn) -> giveQueryAccess col, fn

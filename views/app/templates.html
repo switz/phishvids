@@ -81,16 +81,16 @@
         <div class=ul-header>{_month}/{_day} {_venue}</div>
         <ul>
           {#with _show as :show}
-            {#if :show.setlist.error}
-              <li class={setlist.class}>{:show.setlist.error}</li>
+            {#if empty(:show.setlist)}
+              <li class=error>The database could not be reached. Please try again later.</li>
             {else}
               {#each :show.setlist as :set}
-                <li class=set-title>Set {:set.key}</li>
-                {#each :set.value as :song}
-                  {#if :song.title}
+                <li class=set-title>{:set.number}</li>
+                {#each :set.songs as :song}
+                  {#if :song.name}
                     <li>
-                      <a class="song {:song.blue} {equal(:song.number,_number)}" href="/{_year}/{_month}/{_day}/{:song.number}">
-                        {:song.title}{#if :song.sup}<sup>{:song.sup}</sup>{/if} <span class=segue>{:song.segue}</span>
+                      <a class="song {#if contains(:song.number, _blue)}blue{/if} {equal(:song.number,_number)}" href="/{_year}/{_month}/{_day}/{:song.number}">
+                        {:song.name}{#if :song.sup}<sup>[{:song.sup}]</sup>{/if} <span class=segue>{:song.segue}</span>
                       </a>
                     </li>
                   {/if}

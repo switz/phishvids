@@ -21,3 +21,8 @@ view.fn 'parseYouTubeURL', (url) ->
   matches = undefined
   unless url.indexOf("youtube.com/watch") is -1
     return getParm(url, "v")
+view.fn 'contains', (idx, obj) ->
+  return true if obj[idx]
+  return false
+view.fn 'empty', (arr) ->
+  return !arr.length
