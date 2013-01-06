@@ -242,18 +242,17 @@ ready (model) ->
   # name as the module that includes Derby. They can also be bound to DOM
   # events using the "x-bind" attribute in a template.
   @stop = ->
-    _gaq.push(['_trackEvent', 'User', 'Stability', 'Connected', false])
+    _gaq.push(['_trackEvent', 'User', 'Stability', 'Disconnected', 1])
     # Any path name that starts with an underscore is private to the current
     # client. Nothing set under a private path is synced back to the server.
     model.set '_stopped', true
 
   do @start = ->
-    _gaq.push(['_trackEvent', 'User', 'Stability', 'Connected', true])
     model.set '_stopped', false
 
   model.set '_showReconnect', true
   @connect = ->
-    _gaq.push(['_trackEvent', 'User', 'Stability', 'Reconnected', true])
+    _gaq.push(['_trackEvent', 'User', 'Stability', 'Reconnected', 1])
     # Hide the reconnect link for a second after clicking it
     model.set '_showReconnect', false
     setTimeout (-> model.set '_showReconnect', true), 1000

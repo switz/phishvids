@@ -12,3 +12,18 @@ var PhishVids = function() {
     engineKey: '2q5QqEPzcuk6Y2oq1vWv'
   });
 }
+
+window.onerror = function(message, file, line) {
+  return _gaq.push(['_trackEvent', 'error', "(window) " + message + " [" + file + " (" + line + ")]"]);
+};
+
+$(document).ajaxError(function(event, xhr, ajaxOptions, thrownError) {
+  var responseText;
+  if ((xhr != null ? xhr.status : void 0) === 404) {
+    return;
+  }
+  responseText = $.parseJSON(xhr.responseText);
+  if (responseText) {
+    _gaq.push(['_trackEvent', 'error', "(ajax " + xhr.status + ") " + thrownError + " " + responseText.message + " [" + ajaxOptions.url + "]"]);
+  }
+});
