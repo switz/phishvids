@@ -66,8 +66,7 @@ functions.year = (page, model, params, callback) ->
     class: ''
 
   model.fetch model.query('years').getYearsShows(year), (err, yearModel) ->
-    if err
-      console.error "Query Error: #{err}"
+    if err then console.error "Query Error: #{err}"
 
     yearModelGet = yearModel.get()
 
@@ -157,8 +156,7 @@ functions.song = (page, model, params) ->
 
   # Fetch mongodb query
   model.fetch model.query('videos').getVideos(year, month, day, number), (err, videoModel) ->
-    if err
-      console.error "Query error: #{err}"
+    if err then console.error "Query error: #{err}"
 
     # Get video model from mongodb
     videoModelGet = videoModel.get()
