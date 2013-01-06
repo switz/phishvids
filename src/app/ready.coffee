@@ -25,8 +25,8 @@ ready (model) ->
 
     scrollGet = scroll.get()
 
-    for i of scrollGet
-      $(".span3 ul.#{i}").scrollTop scrollGet[i]
+    for c of scrollGet
+      $(".span3 ul.#{i}").scrollTop scrollGet[c]
 
     $('.span3 ul').scroll ->
       c = $(this).attr('class')

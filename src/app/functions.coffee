@@ -85,7 +85,7 @@ functions.year = (page, model, params, callback) ->
     if typeof callback is 'function'
       callback()
     else
-      page.render 'year'
+      page.render 'index'
 
 functions.show = (page, model, params, callback) ->
   model.set '_isFront', true
