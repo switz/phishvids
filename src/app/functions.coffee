@@ -10,7 +10,7 @@ functions.index = (page, model, params, callback) ->
   model.set '_isFront', true
 
   model.setNull '_years', config.YEAR_ARRAY
-  model.del m for m in ['_month','_day','_number','_show','_song','_tiph','_year','_shows','_about','_validateVideos']
+  model.del m for m in ['_month','_day','_number','_show','_song','_tiph','_year','_shows','_about','_validateVideos', '_scroll.yearList']
   model.set s, 'Phish Videos' for s in ['_title', '_stTitle']
 
   if typeof callback is 'function'
@@ -56,7 +56,7 @@ functions.year = (page, model, params, callback) ->
   year = +params[0]
 
   # Clear unmatched columns
-  model.del m for m in ['_month','_day','_number','_show','_song']
+  model.del m for m in ['_month','_day','_number','_show','_song', '_scroll.year']
 
   model.set '_year', year
 
@@ -85,7 +85,7 @@ functions.year = (page, model, params, callback) ->
     if typeof callback is 'function'
       callback()
     else
-      page.render 'index'
+      page.render 'year'
 
 functions.show = (page, model, params, callback) ->
   model.set '_isFront', true
@@ -101,7 +101,7 @@ functions.show = (page, model, params, callback) ->
   day = +params[2]
 
   # Clear unmatched columns,
-  model.del s for s in ['_song','_number','_videos']
+  model.del s for s in ['_song','_number','_videos', '_scroll.show']
 
   # Causing fail when loading up sub url first (/2011) then navigating
   model.set '_year', year
@@ -146,6 +146,8 @@ functions.song = (page, model, params) ->
   month = +params[1]
   day = +params[2]
   number = +params[3]
+
+  model.del '_scroll.song'
 
   # Set local models
   model.set '_year', year

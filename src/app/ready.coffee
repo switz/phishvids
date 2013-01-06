@@ -15,12 +15,22 @@ ready (model) ->
   number = model.at '_number'
   newVideo = model.at '_newVideo'
   validateVideos = model.at '_validateVideos'
+  scroll = model.at '_scroll'
 
   model.setNull '_years', config.YEAR_ARRAY
 
   @on 'render', (ctx) ->
     PhishVids()
     _gaq.push ['_trackPageview', window.location.pathname]
+
+    scrollGet = scroll.get()
+
+    for i of scrollGet
+      $(".span3 ul.#{i}").scrollTop scrollGet[i]
+
+    $('.span3 ul').scroll ->
+      c = $(this).attr('class')
+      scroll.set c, $('.span3:nth(1) ul').scrollTop()
 
   # TODO: Refactor add/update into one function
   @add = ->

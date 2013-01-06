@@ -35,7 +35,7 @@
   <div class=span3>
     <div id="year-list-container">
       <div class=ul-header>Choose a Year</div>
-      <ul>
+      <ul class=yearList>
         {#each _years as :year}
           <li><a class="year blue {:year} {equal(:year,_year)}" href=/{:year}>{:year}</a></li>
         {/each}
@@ -48,7 +48,7 @@
     <div class=span3>
       <div id="year-container">
         <div class=ul-header>{_year}</div>
-        <ul>
+        <ul class=year>
         {#if _shows.message}
           <li class="{_shows.class}">{_shows.message}</li>
           {#if _shows.error}
@@ -79,7 +79,7 @@
     <div class=span3>
       <div id="show-container">
         <div class=ul-header>{_month}/{_day} {_venue}</div>
-        <ul>
+        <ul class=show>
           {#with _show as :show}
             {#if empty(:show.setlist)}
               <li class=error>The database could not be reached. Please try again later.</li>
@@ -119,7 +119,7 @@
       <div class=span3>
         <div id="song-container">
           <div class=ul-header>{:song.songname}</div>
-          <ul>
+          <ul class=song>
             {#if :song.videos}
               <li>Videos</li>
             {/if}
