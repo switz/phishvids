@@ -116,6 +116,8 @@ functions.show = (page, model, params, callback) ->
 
     showid = setlistModelGet.showid
 
+    model.set '_venue', setlistModelGet.venue
+
     model.fetch model.query('videos').checkIfVideosExistForSetlist(showid), (err, videoModel) ->
       if err then console.error "Query error: #{err}"
 
