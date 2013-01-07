@@ -27,7 +27,7 @@ root = path.dirname path.dirname __dirname
 publicPath = path.join root, 'public'
 
 expressApp
-  .use(express.favicon())
+  .use(express.favicon("#{publicPath}/img/favicon.ico"))
   # Gzip static files and serve from memory
   .use(express.static publicPath)
   # Gzip dynamically rendered content
