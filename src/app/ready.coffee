@@ -30,7 +30,7 @@ ready (model) ->
 
     $('.span3 ul').scroll ->
       c = $(this).attr('class')
-      scroll.set c, $('.span3:nth(1) ul').scrollTop()
+      scroll.set c, $("span3 ul.#{c}").scrollTop()
 
   # TODO: Refactor add/update into one function
   @add = ->
