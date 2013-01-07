@@ -66,7 +66,7 @@ functions.year = (page, model, params, callback) ->
     class: ''
 
   model.fetch model.query('years').getYearsShows(year), (err, yearModel) ->
-    if err then console.error "Query Error: #{err}"
+    if err then throw new Error "Year query error: #{err}"
 
     yearModelGet = yearModel.get()
 
@@ -108,7 +108,7 @@ functions.show = (page, model, params, callback) ->
   model.set '_day', addZero day
 
   model.fetch model.query('setlists').getSetlist(year, month, day), (err, setlistModel) ->
-    if err then console.error "Query error: #{err}"
+    if err then throw new Error "Show Setlist query error: #{err}"
 
     setlistModelGet = setlistModel.get()[0]
 
@@ -119,7 +119,7 @@ functions.show = (page, model, params, callback) ->
     model.set '_venue', setlistModelGet.venue
 
     model.fetch model.query('videos').checkIfVideosExistForSetlist(showid), (err, videoModel) ->
-      if err then console.error "Query error: #{err}"
+      if err then throw new Error "Show Video query error: #{err}"
 
       videoModelGet = videoModel.get()
 
@@ -158,7 +158,7 @@ functions.song = (page, model, params) ->
 
   # Fetch mongodb query
   model.fetch model.query('videos').getVideos(year, month, day, number), (err, videoModel) ->
-    if err then console.error "Query error: #{err}"
+    if err then throw new Error "Song query error: #{err}"
 
     # Get video model from mongodb
     videoModelGet = videoModel.get()
