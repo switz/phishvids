@@ -14,6 +14,8 @@ server = module.exports = http.createServer expressApp
 module.exports.expressApp = expressApp
 
 derby.use require('racer-db-mongo')
+racer.use racer.logPlugin
+derby.use derby.logPlugin
 
 store = module.exports.pvStore = derby.createStore
   listen: server
@@ -67,6 +69,3 @@ if process.env.NODE_ENV is "production"
   process.on 'uncaughtException', (err) ->
     console.log err.stack
     console.log "Node NOT Exiting..."
-else
-  racer.use(racer.logPlugin)
-  derby.use(derby.logPlugin)
