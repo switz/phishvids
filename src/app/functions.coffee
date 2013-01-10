@@ -7,9 +7,9 @@ PhishAPI = require '../api/external_apis/phish_net'
 functions = {}
 
 functions.index = (page, model, params, callback) ->
+  # We're on the front page!
   model.set '_isFront', true
 
-  # Set year list
   model.setNull '_years', config.YEAR_ARRAY
   # Clear models
   model.del m for m in ['_month','_day','_number','_show','_song','_tiph','_year','_shows','_about','_validateVideos', '_scroll.yearList']
@@ -24,7 +24,10 @@ functions.index = (page, model, params, callback) ->
 functions.tiph = (page, model) ->
   model.set '_isFront', false
 
+  model.del m for m in config.DEL_ARRAY.concat ['_about']
+
   _tiph = model.at '_tiph'
+  # Fetch today in phish history videos
   model.fetch model.query('videos').tiph(), (err, tiphModel) ->
     t = tiphModel.get()
     if t?.length
@@ -35,12 +38,10 @@ functions.tiph = (page, model) ->
         err: true
         message: "Sorry, there were no videos found on #{today.getMonth()+1}/#{today.getDate()}."
 
-    model.del m for m in config.DEL_ARRAY.concat ['_about']
-
     model.set '_title', 'Today In Phish History | Phish Videos'
     model.set '_stTitle', 'Today In Phish History'
 
-    page.render 'index'
+    page.render 'tiph'
 
 functions.about = (page, model) ->
   model.set '_isFront', false
@@ -51,11 +52,9 @@ functions.about = (page, model) ->
   model.set '_title', 'About | Phish Videos'
   model.set '_stTitle', 'About'
 
-  page.render()
+  page.render 'about'
 
 functions.year = (page, model, params, callback) ->
-  model.set '_isFront', true
-
   year = +params[0]
 
   # Clear unmatched columns
@@ -90,8 +89,6 @@ functions.year = (page, model, params, callback) ->
       page.render 'index'
 
 functions.show = (page, model, params, callback) ->
-  model.set '_isFront', true
-
   show = model.at '_show'
 
   show.set 'setlist',
@@ -144,8 +141,6 @@ functions.show = (page, model, params, callback) ->
         page.render 'index'
 
 functions.song = (page, model, params) ->
-  model.set '_isFront', true
-
   year = +params[0]
   month = +params[1]
   day = +params[2]
