@@ -36,9 +36,9 @@
     <div id="year-list-container">
       <div class=ul-header>Choose a Year</div>
       <ul class=yearList>
-        {#each _years as :year}
-          <li><a class="year blue {:year} {equal(:year,_year)}" href=/{:year}>{:year}</a></li>
-        {/each}
+        {{#each _years as :year}}
+          <li><a class="year blue {{:year}} {{equal(:year,_year)}}" href=/{:year}>{{:year}}</a></li>
+        {{/each}}
       </ul>
     </div>
   </div>
@@ -56,15 +56,15 @@
             <li>If issue persists, <a href="mailto:help@phishvids.com" class=clear>email us</a>.</li>
           {/if}
         {else}
-          {#each _shows as :show}
+          {{#each _shows as :show}}
             <li>
-              <a class="show{#if :show.hasVideos} blue{/if} {equal(addZero(:show.month),_month)}{equal(addZero(:show.day),_day)}" href="/{_year}/{addZero(:show.month)}/{addZero(:show.day)}">
-                <span class=date>{:show.month}/{addZero(:show.day)}</span>
+              <a class="show{{#if :show.hasVideos}} blue{{/if}} {{equal(addZero(:show.month),_month)}}{{equal(addZero(:show.day),_day)}}" href="/{{_year}}/{{addZero(:show.month)}}/{{addZero(:show.day)}}">
+                <span class=date>{{:show.month}}/{{addZero(:show.day)}}</span>
                 &nbsp;
-                <span class=venue>{:show.venue}</span>
+                <span class=venue>{{:show.venue}}</span>
               </a>
             </li>
-          {/each}
+          {{/each}}
           <li>
             <a href="http://phish.net/setlists/{_year}.html" target="_blank">Open on Phish.net</a>
           </li>

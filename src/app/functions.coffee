@@ -9,8 +9,11 @@ functions = {}
 functions.index = (page, model, params, callback) ->
   model.set '_isFront', true
 
+  # Set year list
   model.setNull '_years', config.YEAR_ARRAY
+  # Clear models
   model.del m for m in ['_month','_day','_number','_show','_song','_tiph','_year','_shows','_about','_validateVideos', '_scroll.yearList']
+  # Set page title and swiftype title
   model.set s, 'Phish Videos' for s in ['_title', '_stTitle']
 
   if typeof callback is 'function'
