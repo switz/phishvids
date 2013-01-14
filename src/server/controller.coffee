@@ -66,8 +66,9 @@ parseYouTubeURL = (url) ->
   retVal
 
 ## SERVER ONLY ROUTES ##
+controller = {}
 
-module.exports.api =
+controller.api =
   v1:
     video:
       youtube:
@@ -178,7 +179,7 @@ module.exports.api =
               if (err) then console.log 'yt', err
               res.json doc
 
-module.exports.status = (req, res) ->
+controller.status = (req, res) ->
   obj =
     status: 'up'
     easteregg: false
@@ -187,12 +188,7 @@ module.exports.status = (req, res) ->
     obj.icculus = 'Read the fucking book.'
   res.json obj
 
-module.exports.all = (req, res) ->
-  res.send 404, '404 Page not found'
+controller.all = (req, res) ->
+  throw "404: #{req.url}"
 
-module.exports.switchcam = (req, res) ->
-  month = req.params.month
-  day = req.params.day
-  year = req.params.year
-
-  res.send '404'
+module.exports = controller
