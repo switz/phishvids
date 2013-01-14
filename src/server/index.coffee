@@ -15,7 +15,7 @@ module.exports.expressApp = expressApp
 
 derby.use require('racer-db-mongo')
 
-unless process.env.NODE_ENV is 'development'
+unless process.env.NODE_ENV is 'production'
   racer.use racer.logPlugin
   derby.use derby.logPlugin
 
@@ -65,3 +65,6 @@ Error.stackTraceLimit = Infinity
 
 io.configure 'production', ->
   io.set "transports", ["xhr-polling", "jsonp-polling", "htmlfile"]
+
+io.configure 'development', ->
+  io.set "transports", ["websocket", "xhr-polling", "jsonp-polling", "htmlfile"]
