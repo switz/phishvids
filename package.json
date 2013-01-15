@@ -14,7 +14,8 @@
     "mocha": "~1.6.0",
     "should": "~1.2.1",
     "async": "~0.1.22",
-    "forever-monitor": "~1.1.0"
+    "forever-monitor": "~1.1.0",
+    "toobusy": "~0.1.1"
   },
   "private": true,
   "devDependencies": {
