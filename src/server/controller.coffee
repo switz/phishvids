@@ -82,7 +82,7 @@ controller.api =
           videos = []
           i = 0
           len = data.length
-          console.log data, typeof data, instanceof data, data.length, [data], new Array data
+          console.log data, typeof data, data.length, [data], new Array data
           data.map (d) =>
             id = parseYouTubeURL(d).id
             unless id then return res.send {err: err}
