@@ -78,7 +78,7 @@ controller.api =
           err = config.error.addVideo
           return res.send {err: err} unless req.body.data
           data = sanitize(req.body.data).xss()
-          if !data and isEmptyObject data then return res.send {err: err}
+          if !data and !data.length then return res.send {err: err}
           videos = []
           i = 0
           len = data.length
