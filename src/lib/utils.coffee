@@ -31,6 +31,11 @@ removeDuplicates = (arr) ->
     arr.push hold[key]
   arr
 
+isEmptyObject = (obj) ->
+  for own i of obj
+    return false
+  return true
+
 module.exports =
   {
     onServer
@@ -38,4 +43,5 @@ module.exports =
     toParam
     addZero
     removeDuplicates
+    isEmptyObject
   }

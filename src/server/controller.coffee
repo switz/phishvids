@@ -6,6 +6,8 @@ config = require './config'
 YoutubeAPI = require '../api/external_apis/youtube'
 extractDate = require '../lib/extract_date'
 
+{ isEmptyObject } = require '../lib/utils'
+
 db = mongoose.createConnection(process.env.pv_uri);
 
 ## Schemas ##
@@ -76,7 +78,7 @@ controller.api =
           err = config.error.addVideo
           return res.send {err: err} unless req.body.data
           data = sanitize(req.body.data).xss()
-          unless data then return res.send {err: err}
+          if !data and isEmptyObject data then return res.send {err: err}
           videos = []
           i = 0
           len = data.length
