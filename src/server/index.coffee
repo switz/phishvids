@@ -32,11 +32,6 @@ root = path.dirname path.dirname __dirname
 publicPath = path.join root, 'public'
 
 expressApp
-  .use((req, res, next) ->
-    if toobusy()
-      res.send(503, "There's too many people funking out. Please try again later.")
-    else next()
-  )
   .use(express.favicon("#{publicPath}/img/favicon.ico"))
   # Gzip static files and serve from memory
   .use(express.static publicPath)
