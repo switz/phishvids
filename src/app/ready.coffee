@@ -1,3 +1,4 @@
+async = require 'async'
 app = require '../app'
 config = require './config'
 { view, ready } = require './index'
@@ -46,7 +47,7 @@ ready (model) ->
         if (!data || data.err || $.isEmptyObject data) then return false
         shows = []
         i = 0
-        data.map (d) ->
+        for d in data
           getShow d, (err, show, json) ->
             if json and !json.error
               show.net = json
