@@ -3,7 +3,6 @@ path = require 'path'
 express = require 'express'
 derby = require 'derby'
 racer = require 'racer'
-MongoStore = require('connect-mongo')(express)
 app = require '../app'
 serverError = require './serverError'
 io = racer.io
@@ -48,10 +47,7 @@ expressApp
   .use(store.sessionMiddleware
     secret: process.env.SESSION_SECRET || 'harryhood'
     cookie: {maxAge: ONE_YEAR}
-    store: new MongoStore
-      url: process.env.pv_uri
   )
-
   # Adds req.getModel method
   .use(store.modelMiddleware())
   # Creates an express middleware from the app's routes
