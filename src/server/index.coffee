@@ -43,11 +43,11 @@ expressApp
 
   # Uncomment and supply secret to add Derby session handling
   # Derby session middleware creates req.session and socket.io sessions
-  .use(express.cookieParser())
-  .use(store.sessionMiddleware
-    secret: process.env.SESSION_SECRET || 'harryhood'
-    cookie: {maxAge: ONE_YEAR}
-  )
+  #.use(express.cookieParser())
+  #.use(store.sessionMiddleware
+  #  secret: process.env.SESSION_SECRET || 'harryhood'
+  #  cookie: {maxAge: ONE_YEAR}
+  #)
 
   # Adds req.getModel method
   .use(store.modelMiddleware())
