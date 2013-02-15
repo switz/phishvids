@@ -68,7 +68,8 @@ functions.year = (page, model, params, callback) ->
     class: ''
 
   model.fetch model.query('years').getYearsShows(year), (err, yearModel) ->
-    if err then throw new Error "Year query error: #{err}"
+    #if err then throw new Error "Year query error: #{err}"
+    console.log err if err and console
 
     yearModelGet = yearModel.get()
 
