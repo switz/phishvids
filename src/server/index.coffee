@@ -3,6 +3,7 @@ path = require 'path'
 express = require 'express'
 derby = require 'derby'
 racer = require 'racer'
+MongoStore = require('connect-mongo')(express)
 app = require '../app'
 serverError = require './serverError'
 io = racer.io
@@ -43,11 +44,13 @@ expressApp
 
   # Uncomment and supply secret to add Derby session handling
   # Derby session middleware creates req.session and socket.io sessions
-  #.use(express.cookieParser())
-  #.use(store.sessionMiddleware
-  #  secret: process.env.SESSION_SECRET || 'harryhood'
-  #  cookie: {maxAge: ONE_YEAR}
-  #)
+  .use(express.cookieParser())
+  .use(store.sessionMiddleware
+    secret: process.env.SESSION_SECRET || 'harryhood'
+    cookie: {maxAge: ONE_YEAR}
+    store: new MongoStore
+      url: process.env.pv_uri
+  )
 
   # Adds req.getModel method
   .use(store.modelMiddleware())
