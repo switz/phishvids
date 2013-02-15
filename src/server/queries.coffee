@@ -13,8 +13,8 @@ store.query.expose 'years', 'getYearsShows', (year) ->
 
 store.query.expose 'videos', 'checkIfVideosExist', (year) ->
   @where('year').equals(year)
-  .where('approved').equals(true)
-  .one
+    .where('approved').equals(true)
+    .one
 
 store.query.expose 'videos', 'checkIfVideosExistForSetlist', (showid) ->
   @where('showid').equals(showid)
@@ -22,21 +22,21 @@ store.query.expose 'videos', 'checkIfVideosExistForSetlist', (showid) ->
 
 store.query.expose 'videos', 'getVideos', (year, month, day, number) ->
   @where('year').equals(year)
-  .where('month').equals(month)
-  .where('day').equals(day)
-  .where('number').equals(number)
-  .where('approved').equals(true)
+    .where('month').equals(month)
+    .where('day').equals(day)
+    .where('number').equals(number)
+    .where('approved').equals(true)
 
 store.query.expose 'videos', 'tiph', ->
   today = new Date()
   @where('month').equals(today.getMonth()+1)
-  .where('day').equals(today.getDate())
+    .where('day').equals(today.getDate())
 
 store.query.expose 'setlists', 'getSetlist', (year, month, day) ->
   @where('year').equals(year)
-  .where('month').equals(month)
-  .where('day').equals(day)
-  .one
+    .where('month').equals(month)
+    .where('day').equals(day)
+    .one
 
 ## Give query access
 
