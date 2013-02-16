@@ -2,18 +2,6 @@ store = require('./index').pvStore
 
 store.accessControl = true
 
-store.readPathAccess 'videos.*', () -> #captures, next) ->
-  next = arguments[arguments.length-1]
-  next(true)
-
-store.readPathAccess 'years.*', () -> #captures, next) ->
-  next = arguments[arguments.length-1]
-  next(true)
-
-store.readPathAccess 'setlists.*', () -> #captures, next) ->
-  next = arguments[arguments.length-1]
-  next(true)
-
 ## Query Motifs
 
 store.query.expose 'years', 'getYearsShows', (year) ->
@@ -25,8 +13,9 @@ store.query.expose 'videos', 'checkIfVideosExist', (year) ->
     .one
 
 store.query.expose 'videos', 'checkIfVideosExistForSetlist', (showid) ->
-  @where('showid').equals(showid)
-  .where('approved').equals(true)
+  @where('showid')
+    .equals(showid)
+    .where('approved').equals(true)
 
 store.query.expose 'videos', 'getVideos', (year, month, day, number) ->
   @where('year').equals(year)
@@ -50,7 +39,7 @@ store.query.expose 'setlists', 'getSetlist', (year, month, day) ->
 
 giveQueryAccess = (col, fn) ->
   store.queryAccess col, fn, (methodArgs) ->
-    accept = arguments[arguments.length - 1]
+    accept = arguments[arguments.length - 2]
     accept true # for now
 
 obj =
