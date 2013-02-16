@@ -6,6 +6,14 @@ store.readPathAccess 'videos.*', () -> #captures, next) ->
   next = arguments[arguments.length-1]
   next(true)
 
+store.readPathAccess 'years.*', () -> #captures, next) ->
+  next = arguments[arguments.length-1]
+  next(true)
+
+store.readPathAccess 'setlists.*', () -> #captures, next) ->
+  next = arguments[arguments.length-1]
+  next(true)
+
 ## Query Motifs
 
 store.query.expose 'years', 'getYearsShows', (year) ->
