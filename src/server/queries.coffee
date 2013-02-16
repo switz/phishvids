@@ -1,6 +1,6 @@
 store = require('./index').pvStore
 
-store.accessControl = false
+store.accessControl = true
 
 store.readPathAccess 'videos.*', () -> #captures, next) ->
   next = arguments[arguments.length-1]
