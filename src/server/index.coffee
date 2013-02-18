@@ -3,6 +3,7 @@ path = require 'path'
 express = require 'express'
 derby = require 'derby'
 racer = require 'racer'
+MongoStore = require('connect-mongo')(express)
 app = require '../app'
 serverError = require './serverError'
 io = racer.io
@@ -26,7 +27,7 @@ store = module.exports.pvStore = derby.createStore
     uri: process.env.pv_uri
     safe: true
 
-ONE_YEAR = 1000 * 60 * 60 * 24 * 365
+ONE_DAY = 1000 * 60 * 60 * 24
 root = path.dirname path.dirname __dirname
 publicPath = path.join root, 'public'
 
@@ -45,9 +46,11 @@ expressApp
   # Derby session middleware creates req.session and socket.io sessions
   .use(express.cookieParser())
   #.use(store.sessionMiddleware
-  #  secret: process.env.SESSION_SECRET || 'harryhood'
-  #  cookie: {maxAge: ONE_YEAR}
-  #)
+    secret: process.env.SESSION_SECRET || 'harryhood'
+    cookie: {maxAge: ONE_DAY}
+    store: new MongoStore
+      url: process.env.pv_uri
+  )
   # Adds req.getModel method
   .use(store.modelMiddleware())
   # Creates an express middleware from the app's routes
