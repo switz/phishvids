@@ -13,8 +13,7 @@ store.query.expose 'videos', 'checkIfVideosExist', (year) ->
     .one
 
 store.query.expose 'videos', 'checkIfVideosExistForSetlist', (showid) ->
-  @where('showid')
-    .equals(showid)
+  @where('showid').equals(showid)
     .where('approved').equals(true)
 
 store.query.expose 'videos', 'getVideos', (year, month, day, number) ->
