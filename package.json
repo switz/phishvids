@@ -5,7 +5,7 @@
   "main": "./phishvids.js",
   "dependencies": {
     "derby": "https://github.com/codeparty/derby/tarball/master",
-    "racer": "https://github.com/codeparty/racer/tarball/master",
+    "racer": "https://github.com/SLaks/racer/tarball/master",
     "express": "3.0.4",
     "coffee-script": ">=1.3.3",
     "racer-db-mongo": "~0.3.13",
