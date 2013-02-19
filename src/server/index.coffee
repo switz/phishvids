@@ -62,8 +62,6 @@ routes = require './routes'
 
 queries = require './queries'
 
-require('nodefly').profile process.env.NODEFLY_KEY, ['phishvids','Heroku']
-
 # Infinite stack trace
 Error.stackTraceLimit = Infinity
 

@@ -1,3 +1,5 @@
+require('nodefly').profile(process.env.NODEFLY_KEY, ['phishvids','Heroku']);
+
 if (process.env.NODE_ENV === 'production') {
   require('./src/bootstrap').listen(process.env.PORT || 3000);
 } else {

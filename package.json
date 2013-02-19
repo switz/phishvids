@@ -14,7 +14,8 @@
     "mocha": "~1.6.0",
     "should": "~1.2.1",
     "async": "~0.1.22",
-    "connect-mongo": "~0.3.2"
+    "connect-mongo": "~0.3.2",
+    "nodefly": "~0.1.28"
   },
   "private": true,
   "devDependencies": {
