@@ -15,7 +15,8 @@
     "should": "~1.2.1",
     "async": "~0.1.22",
     "connect-mongo": "~0.3.2",
-    "nodefly": "~0.1.28"
+    "nodefly": "~0.1.28",
+    "webkit-devtools-agent": "0.0.4"
   },
   "private": true,
   "devDependencies": {
@@ -24,7 +25,7 @@
   },
   "scripts": {
     "start": "phishvids.js",
-    "test": "mocha test/lib.coffee"
+    "test": "mocha test/api.mocha.coffee"
   },
   "engines": {
     "node": "0.8.x",
