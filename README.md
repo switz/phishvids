@@ -34,3 +34,5 @@ You can get a Phish.net API key from [here](http://api.phish.net/).
 
 ## Setlist data
 All setlist data is courtesy of the Mockingbird Foundation. Thanks to them, this is all possible.
+
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/7851723e429c54a1da9e04dc5c588a7d "githalytics.com")](http://githalytics.com/switz/phishvids)
