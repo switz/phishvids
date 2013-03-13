@@ -23,8 +23,7 @@
     "jsdom": "~0.3.4"
   },
   "scripts": {
-    "start": "phishvids.js",
-    "test": "mocha test/api.mocha.coffee"
+    "start": "phishvids.js"
   },
   "engines": {
     "node": "0.8.x",
