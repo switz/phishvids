@@ -25,10 +25,9 @@ controller =
   show: (page, model, params) -> generateFn 'show', ['index','year'], page, model, params
   song: (page, model, params) -> generateFn 'song', ['index','year','show'], page, model, params
 
-module.exports = controller
-
 # import ready callback
 require './ready'
-
 # import view functions
 require './viewFunctions'
+
+module.exports = controller
