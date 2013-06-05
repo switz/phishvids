@@ -1,6 +1,6 @@
 derby = require('derby')
 
-derby.use require('../../ui')
-
-derby.createApp module
+app = derby.createApp module
 routes = require './routes'
+
+app.use require('../../ui')

@@ -8,13 +8,13 @@ functions = {}
 
 functions.index = (page, model, params, callback) ->
   # We're on the front page!
-  model.set '_isFront', true
+  model.set '_page.isFront', true
 
-  model.setNull '_years', config.YEAR_ARRAY
+  model.setNull '_page.years', config.YEAR_ARRAY
   # Clear models
-  model.del m for m in ['_month','_day','_number','_show','_song','_tiph','_year','_shows','_about','_validateVideos', '_scroll.yearList']
+  model.del m for m in ['_page.month','_page.day','_page.number','_page.show','_page.song','_page.tiph','_page.year','_page.shows','_page.about','_page.validateVideos', '_page.scroll.yearList']
   # Set page title and swiftype title
-  model.set s, 'Phish Videos' for s in ['_title', '_stTitle']
+  model.set s, 'Phish Videos' for s in ['_page.title', '_page.stTitle']
 
   if typeof callback is 'function'
     callback()
@@ -22,11 +22,11 @@ functions.index = (page, model, params, callback) ->
     page.render 'index'
 
 functions.tiph = (page, model) ->
-  model.set '_isFront', false
+  model.set '_page.isFront', false
 
-  model.del m for m in config.DEL_ARRAY.concat ['_about']
+  model.del m for m in config.DEL_ARRAY.concat ['_page.about']
 
-  _tiph = model.at '_tiph'
+  _tiph = model.at '_page.tiph'
   # Fetch today in phish history videos
   model.fetch model.query('videos').tiph(), (err, tiphModel) ->
     t = tiphModel.get()
@@ -38,19 +38,19 @@ functions.tiph = (page, model) ->
         err: true
         message: "Sorry, there were no videos found on #{today.getMonth()+1}/#{today.getDate()}."
 
-    model.set '_title', 'Today In Phish History | Phish Videos'
-    model.set '_stTitle', 'Today In Phish History'
+    model.set '_page.title', 'Today In Phish History | Phish Videos'
+    model.set '_page.stTitle', 'Today In Phish History'
 
     page.render 'tiph'
 
 functions.about = (page, model) ->
-  model.set '_isFront', false
+  model.set '_page.isFront', false
 
-  model.set '_about', true
-  model.del m for m in config.DEL_ARRAY.concat ['_tiph']
+  model.set '_page.about', true
+  model.del m for m in config.DEL_ARRAY.concat ['_page.tiph']
 
-  model.set '_title', 'About | Phish Videos'
-  model.set '_stTitle', 'About'
+  model.set '_page.title', 'About | Phish Videos'
+  model.set '_page.stTitle', 'About'
 
   page.render 'about'
 
@@ -58,11 +58,11 @@ functions.year = (page, model, params, callback) ->
   year = +params[0]
 
   # Clear unmatched columns
-  model.del m for m in ['_month','_day','_number','_show','_song', '_scroll.year']
+  model.del m for m in ['_page.month','_page.day','_page.number','_page.show','_page.song', '_page.scroll.year']
 
-  model.set '_year', year
+  model.set '_page.year', year
 
-  model.set '_shows',
+  model.set '_page.shows',
     message: 'Loading...'
     error: false
     class: ''
@@ -74,15 +74,15 @@ functions.year = (page, model, params, callback) ->
     yearModelGet = yearModel.get()
 
     unless yearModelGet and yearModelGet.length
-      model.set '_shows',
+      model.set '_page.shows',
         message: 'Either our database is down, or there are no shows with video for this year. Sorry.'
         error: true
         class: 'error'
     else if yearModelGet[0].shows
-      model.set '_shows', yearModelGet[0].shows || []
+      model.set '_page.shows', yearModelGet[0].shows || []
 
-    model.set '_title', "#{year} Phish Videos"
-    model.set '_stTitle', year
+    model.set '_page.title', "#{year} Phish Videos"
+    model.set '_page.stTitle', year
 
     if typeof callback is 'function'
       callback()
@@ -90,7 +90,7 @@ functions.year = (page, model, params, callback) ->
       page.render 'index'
 
 functions.show = (page, model, params, callback) ->
-  show = model.at '_show'
+  show = model.at '_page.show'
 
   show.set 'setlist',
     error: 'Loading...'
@@ -101,12 +101,12 @@ functions.show = (page, model, params, callback) ->
   day = +params[2]
 
   # Clear unmatched columns,
-  model.del s for s in ['_song','_number','_videos', '_scroll.show']
+  model.del s for s in ['_page.song','_page.number','_page.videos', '_page.scroll.show']
 
   # Causing fail when loading up sub url first (/2011) then navigating
-  model.set '_year', year
-  model.set '_month', addZero month
-  model.set '_day', addZero day
+  model.set '_page.year', year
+  model.set '_page.month', addZero month
+  model.set '_page.day', addZero day
 
   model.fetch model.query('setlists').getSetlist(year, month, day), (err, setlistModel) ->
     if err then throw new Error "Show Setlist query error: #{err}"
@@ -117,7 +117,7 @@ functions.show = (page, model, params, callback) ->
 
     showid = setlistModelGet.showid
 
-    model.set '_venue', setlistModelGet.venue
+    model.set '_page.venue', setlistModelGet.venue
 
     model.fetch model.query('videos').checkIfVideosExistForSetlist(showid), (err, videoModel) ->
       if err then throw new Error "Show Video query error: #{err}"
@@ -130,11 +130,11 @@ functions.show = (page, model, params, callback) ->
         for video in videoModelGet
           blue[addZero video.number] = true
 
-        model.set '_blue', blue
+        model.set '_page.blue', blue
         show.set setlistModelGet
 
-      model.set '_title', "#{month}/#{day}/#{year} | Phish Videos"
-      model.set '_stTitle', "#{month}/#{day}/#{year}"
+      model.set '_page.title', "#{month}/#{day}/#{year} | Phish Videos"
+      model.set '_page.stTitle', "#{month}/#{day}/#{year}"
 
       if typeof callback is 'function'
         callback()
@@ -147,13 +147,13 @@ functions.song = (page, model, params) ->
   day = +params[2]
   number = +params[3]
 
-  model.del '_scroll.song'
+  model.del '_page.scroll.song'
 
   # Set local models
-  model.set '_year', year
-  model.set '_month', addZero month
-  model.set '_day', addZero day
-  model.set '_number', addZero number
+  model.set '_page.year', year
+  model.set '_page.month', addZero month
+  model.set '_page.day', addZero day
+  model.set '_page.number', addZero number
 
   # Fetch mongodb query
   model.fetch model.query('videos').getVideos(year, month, day, number), (err, videoModel) ->
@@ -164,17 +164,17 @@ functions.song = (page, model, params) ->
 
     if videoModelGet?.length > 0
       songname = videoModelGet[0].songname
-      model.set '_song.songname', songname
+      model.set '_page.song.songname', songname
       songname += ' '
       # Set local videos model to videos without audio
-      model.set '_song.videos', videoModel.filter({where:{'audioOnly':false}}).get()
-      model.set '_song.audioVideos', videoModel.filter({where:{'audioOnly': true}}).get()
+      model.set '_page.song.videos', videoModel.filter({where:{'audioOnly':false}}).get()
+      model.set '_page.song.audioVideos', videoModel.filter({where:{'audioOnly': true}}).get()
     else
       songname = ''
-      model.set '_song.songname', songname
+      model.set '_page.song.songname', songname
 
-    model.set '_title', "#{songname}#{month}/#{day}/#{year} | Phish Videos"
-    model.set '_stTitle', "#{songname}"
+    model.set '_page.title', "#{songname}#{month}/#{day}/#{year} | Phish Videos"
+    model.set '_page.stTitle', "#{songname}"
 
     page.render 'index'
 

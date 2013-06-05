@@ -7,7 +7,7 @@ functions = require './functions'
 # This code is so unclear that it's pathetic
 # TODO: Make it more obvious as to what it accomplishes
 generateFn = (item, arr, page, model, params) ->
-  if !model.get('_isFront')
+  if !model.get('_page.isFront')
     createFn = (item, callback) ->
       callback null, (callback) -> functions[item] {}, model, params, callback
     # Convert array of function names to array of async parallel functions

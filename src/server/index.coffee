@@ -3,10 +3,12 @@ path = require 'path'
 express = require 'express'
 derby = require 'derby'
 racer = require 'racer'
+liveDbMongo = require 'livedb-mongo'
+coffeeify = require 'coffeeify'
+racerBrowserChannel = require 'racer-browserchannel'
 MongoStore = require('connect-mongo')(express)
 app = require '../app'
 serverError = require './serverError'
-io = racer.io
 
 ## SERVER CONFIGURATION ##
 
@@ -14,18 +16,18 @@ expressApp = express()
 server = module.exports = http.createServer expressApp
 module.exports.expressApp = expressApp
 
-derby.use require('racer-db-mongo')
+redis = require('redis').createClient()
 
-unless process.env.NODE_ENV is 'production'
-  racer.use racer.logPlugin
-  derby.use derby.logPlugin
+redis.select 1
 
 store = module.exports.pvStore = derby.createStore
   listen: server
-  db:
-    type: 'Mongo'
-    uri: process.env.pv_uri
-    safe: true
+  db: liveDbMongo(process.env.pv_uri + '?auto_reconnect', safe: true)
+  redis: redis
+
+store.on 'bundle', (browserify) ->
+  # Add support for directly requiring coffeescript in browserify bundles
+  browserify.transform coffeeify
 
 ONE_DAY = 1000 * 60 * 60 * 24
 root = path.dirname path.dirname __dirname
@@ -44,13 +46,9 @@ mongo_store = new MongoStore url: process.env.pv_uri, ->
     .use(express.methodOverride())
 
     # Uncomment and supply secret to add Derby session handling
-    # Derby session middleware creates req.session and socket.io sessions
+    # Derby session middleware creates req.session and browser channel sessions
     .use(express.cookieParser())
-    .use(store.sessionMiddleware
-      secret: process.env.SESSION_SECRET || 'harryhood'
-      cookie: {maxAge: ONE_DAY}
-      store: mongo_store
-    )
+    .use(racerBrowserChannel store)
     # Adds req.getModel method
     .use(store.modelMiddleware())
     # Creates an express middleware from the app's routes
@@ -60,13 +58,7 @@ mongo_store = new MongoStore url: process.env.pv_uri, ->
 
   routes = require './routes'
 
-  queries = require './queries'
+  #queries = require './queries'
 
 # Infinite stack trace
 Error.stackTraceLimit = Infinity
-
-io.configure 'production', ->
-  io.set "transports", ["websocket", "xhr-polling", "jsonp-polling", "htmlfile"]
-
-io.configure 'development', ->
-  io.set "transports", ["websocket", "xhr-polling", "jsonp-polling", "htmlfile"]

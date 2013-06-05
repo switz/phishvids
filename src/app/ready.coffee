@@ -10,15 +10,15 @@ config = require './config'
 #############
 
 ready (model) ->
-  month = model.at '_month'
-  day = model.at '_day'
-  year = model.at '_year'
-  number = model.at '_number'
-  newVideo = model.at '_newVideo'
-  validateVideos = model.at '_validateVideos'
-  scroll = model.at '_scroll'
+  month = model.at '_page.month'
+  day = model.at '_page.day'
+  year = model.at '_page.year'
+  number = model.at '_page.number'
+  newVideo = model.at '_page.newVideo'
+  validateVideos = model.at '_page.validateVideos'
+  scroll = model.at '_page.scroll'
 
-  model.setNull '_years', config.YEAR_ARRAY
+  model.setNull '_page.years', config.YEAR_ARRAY
 
   @on 'render', (ctx) ->
     PhishVids()
@@ -72,7 +72,7 @@ ready (model) ->
             shows.push show
             if i is data.length
               $('.add-form-container').slideUp()
-              model.set '_isFront', false
+              model.set '_page.isFront', false
               model.del m for m in ['_month','_day','_number','_show','_song','_tiph','_year','_shows','_about','_validateVideos']
               validateVideos.set
                 data: shows
@@ -81,7 +81,7 @@ ready (model) ->
                 days: [1..31]
       # Error
       error: (jqXHR, textStatus, errorThrown) ->
-        model.set '_message',
+        model.set '_page.message',
           msg: jqXHR.responseText.err
 
   @confirm = (e, el, next) ->
@@ -246,17 +246,17 @@ ready (model) ->
     _gaq.push(['_trackEvent', 'User', 'Stability', 'Disconnected', 1])
     # Any path name that starts with an underscore is private to the current
     # client. Nothing set under a private path is synced back to the server.
-    model.set '_stopped', true
+    model.set '_page.stopped', true
 
   do @start = ->
-    model.set '_stopped', false
+    model.set '_page.stopped', false
 
-  model.set '_showReconnect', true
+  model.set '_page.showReconnect', true
   @connect = ->
     _gaq.push(['_trackEvent', 'User', 'Stability', 'Reconnected', 1])
     # Hide the reconnect link for a second after clicking it
-    model.set '_showReconnect', false
-    setTimeout (-> model.set '_showReconnect', true), 1000
+    model.set '_page.showReconnect', false
+    setTimeout (-> model.set '_page.showReconnect', true), 1000
     model.socket.socket.connect()
 
   @reload = -> window.location.reload()
