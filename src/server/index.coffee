@@ -67,7 +67,7 @@ mongo_store = new MongoStore url: process.env.pv_uri, ->
     .use(express.cookieParser())
     .use(express.session
       secret: process.env.SESSION_SECRET || 'YOUR SECRET HERE'
-      store: new MongoStore(url: process.env.pv_uri, safe: true, auto_reconnect: true)
+      store: mongo_store
     )
     .use(createUserId)
     # Creates an express middleware from the app's routes
