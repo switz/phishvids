@@ -113,7 +113,7 @@ functions.show = (page, model, params, callback) ->
   model.set '_info.month', addZero month
   model.set '_info.day', addZero day
 
-  query = model.query('setlists', { year, month, day, approved })
+  query = model.query('setlists', { year, month, day })
   query.fetch (err) ->
     if err then throw new Error "Show Setlist query error: #{err}"
 
@@ -132,6 +132,7 @@ functions.show = (page, model, params, callback) ->
 
       videoModel = query2.ref '_setlist.video.data'
       videoModelGet = videoModel.get()
+      console.log videoModelGet
 
       # Set related local models
       if videoModelGet and setlistModelGet
