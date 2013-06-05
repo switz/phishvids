@@ -1,6 +1,6 @@
 async = require 'async'
 config = require './config.coffee'
-{ view, ready } = require './index.coffee'
+{ view, ready } = app = require './index.coffee'
 { jsonToSetlist, fixSegue, getShow, compareTitleToSetlist } = require '../lib/show_utils.coffee'
 { addZero } = require '../lib/utils.coffee'
 
@@ -33,7 +33,7 @@ ready (model) ->
       scroll.set c, $(".span3 ul.#{c}").scrollTop()
 
   # TODO: Refactor add/update into one function
-  @add = ->
+  app.fn 'add', ->
     data = newVideo.get()?.replace(/[ \t]+/g,'')?.split('\n')
 
     $.ajax
@@ -83,7 +83,7 @@ ready (model) ->
         model.set '_info.message',
           msg: jqXHR.responseText.err
 
-  @confirm = (e, el, next) ->
+  app.fn 'confirm', (e, el, next) ->
     $el = $(el)
     showModel = model.at($el.parent().siblings('h3')[0])
     show = showModel.get()
@@ -111,14 +111,14 @@ ready (model) ->
           if validateVideos.get().data.length is 0
             validateVideos.del()
 
-  @reject = (e, el, next) ->
+  app.fn 'reject', (e, el, next) ->
     $el = $(el)
     s = model.at($el.parent().siblings('h3')[0])
 
     $el.parents('.validate-video').slideUp 600, ->
       $('.validate-video').show()
       s.remove()
-  @update = (e, el, next) ->
+  app.fn 'update', (e, el, next) ->
     $el = $(el)
     s = model.at($el.parent().siblings('h3')[0])
     show = s.get()
@@ -153,7 +153,7 @@ ready (model) ->
 
         s.set show
 
-  @report = (e, el, next) ->
+  app.fn 'report', (e, el, next) ->
     $a = $(el).siblings('a.video-link')
     return unless $a.length
     video = model.at $a[0]
@@ -162,7 +162,7 @@ ready (model) ->
 
     $(el).siblings('.report-actions').slideDown()
 
-  @hideReport = (e, el, next) ->
+  app.fn 'hideReport', (e, el, next) ->
     $el = $(el)
     $r = $el.siblings('.report-actions:visible')
     return next() unless $r.length
@@ -170,7 +170,7 @@ ready (model) ->
 
     return false
 
-  @incorrect = (e, el, next) ->
+  app.fn 'incorrect', (e, el, next) ->
     $report = $(el).closest('.report-actions')
     return unless $report.length
     # anchor tag
@@ -185,7 +185,7 @@ ready (model) ->
         $report.slideUp -> $report.closest('li').slideUp 'slow', ->
           video.del('update')
       , 800
-  @audioOnly = (e, el, next) ->
+  app.fn 'audioOnly', (e, el, next) ->
     $report = $(el).closest('.report-actions')
     return unless $report.length
     # anchor tag
@@ -202,7 +202,7 @@ ready (model) ->
           $report.parent().slideUp()
           video.del('update')
       , 800
-  @updateInfo = (e, el, next) ->
+  app.fn 'updateInfo', (e, el, next) ->
     $report = $(el).closest('.report-actions')
     $link = $report.siblings('a.video-link')
     return unless $report.length || $link.length
@@ -220,7 +220,7 @@ ready (model) ->
         $report.slideUp ->
           video.del('update')
       , 800
-  @expand = (e, el, next) ->
+  app.fn 'expand', (e, el, next) ->
     video = model.at el
 
     unless video.get('view')
@@ -229,7 +229,7 @@ ready (model) ->
     else
       $(el).siblings('iframe').slideUp -> video.set 'view', false
     return false
-  @addClick = (e, el) ->
+  app.fn 'addClick', (e, el) ->
     $add = $('.add-form-container')
     if $add.is(':visible')
       $add.slideUp()
@@ -241,24 +241,24 @@ ready (model) ->
   # Exported functions are exposed as a global in the browser with the same
   # name as the module that includes Derby. They can also be bound to DOM
   # events using the "x-bind" attribute in a template.
-  @stop = ->
+  app.fn 'stop', ->
     _gaq.push(['_trackEvent', 'User', 'Stability', 'Disconnected', 1])
     # Any path name that starts with an underscore is private to the current
     # client. Nothing set under a private path is synced back to the server.
     model.set '_info.stopped', true
 
-  do @start = ->
+  app.fn 'start', ->
     model.set '_info.stopped', false
 
   model.set '_info.showReconnect', true
-  @connect = ->
+  app.fn 'connect', ->
     _gaq.push(['_trackEvent', 'User', 'Stability', 'Reconnected', 1])
     # Hide the reconnect link for a second after clicking it
     model.set '_info.showReconnect', false
     setTimeout (-> model.set '_info.showReconnect', true), 1000
     model.socket.socket.connect()
 
-  @reload = -> window.location.reload()
+  app.fn 'reload', -> window.location.reload()
 
 putInfo = (name, params, callback) ->
   $.ajax

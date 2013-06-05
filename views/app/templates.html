@@ -66,7 +66,7 @@
             </li>
           {{/each}}
           <li>
-            <a href="http://phish.net/setlists/{_year}.html" target="_info.blank">Open on Phish.net</a>
+            <a href="http://phish.net/setlists/{_info.year}.html" target="_info.blank">Open on Phish.net</a>
           </li>
         {/if}
         </ul>
@@ -78,7 +78,7 @@
   {#if _info.day}
     <div class=span3>
       <div id="show-container">
-        <div class=ul-header>{_month}/{_day} {_info.venue}</div>
+        <div class=ul-header>{_info.month}/{_day} {_info.venue}</div>
         <ul class=show>
           {#with _info.show as :show}
             {#if empty(:show.setlist)}
@@ -89,7 +89,7 @@
                 {#each :set.songs as :song}
                   {#if :song.name}
                     <li>
-                      <a class="song {#if contains(:song.number, _info.blue)}blue{/if} {equal(:song.number,_info.number)}" href="/{_year}/{_month}/{_info.day}/{:song.number}">
+                      <a class="song {#if contains(:song.number, _info.blue)}blue{/if} {equal(:song.number,_info.number)}" href="/{_info.year}/{_info.month}/{_info.day}/{:song.number}">
                         {:song.name}{#if :song.sup}<sup>[{:song.sup}]</sup>{/if} <span class=segue>{:song.segue}</span>
                       </a>
                     </li>
@@ -104,7 +104,7 @@
                 </li>
               {/if}
               <li>
-                <a href="http://phish.net/setlists/?d={_year}-{_month}-{_info.day}" target=_blank>Open on Phish.net</a>
+                <a href="http://phish.net/setlists/?d={_info.year}-{_info.month}-{_info.day}" target=_blank>Open on Phish.net</a>
               </li>
             {/if}
           {/with}

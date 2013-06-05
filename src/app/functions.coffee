@@ -29,8 +29,10 @@ functions.tiph = (page, model) ->
 
   _tiph = model.at '_info.tiph'
   today = new Date()
+  query = model.query('videos', { month: today.getMonth() + 1, day: today.getDate() })
   # Fetch today in phish history videos
-  model.fetch model.query('videos', { month: today.getMonth() + 1, day: today.getDate() }), (err, tiphModel) ->
+  query.fetch (err) ->
+    tiphModel = query.ref '_tiph.data'
     t = tiphModel.get()
     if t?.length
       _tiph.set removeDuplicates t
@@ -138,6 +140,7 @@ functions.show = (page, model, params, callback) ->
       if videoModelGet and setlistModelGet
         blue = {}
         for video in videoModelGet
+          continue unless video
           blue[addZero video.number] = true
 
         model.set '_info.blue', blue
@@ -165,7 +168,7 @@ functions.song = (page, model, params) ->
   model.set '_info.day', addZero day
   model.set '_info.number', addZero number
 
-  query = model.query('videos', { year, month, day, number, approved })
+  query = model.query 'videos', { year, month, day, number, approved }
   # Fetch mongodb query
   query.fetch (err) ->
     if err then throw new Error "Song query error: #{err}"
@@ -173,14 +176,15 @@ functions.song = (page, model, params) ->
     videoModel = query.ref '_video.data'
     # Get video model from mongodb
     videoModelGet = videoModel.get()
+    console.log 'videos', videoModelGet
 
     if videoModelGet?.length > 0
       songname = videoModelGet[0].songname
       model.set '_info.song.songname', songname
       songname += ' '
       # Set local videos model to videos without audio
-      model.set '_info.song.videos', videoModel.filter({where:{'audioOnly':false}}).get()
-      model.set '_info.song.audioVideos', videoModel.filter({where:{'audioOnly': true}}).get()
+      model.set '_info.song.videos', audioOnly videoModelGet, false
+      model.set '_info.song.audioVideos', audioOnly videoModelGet, true
     else
       songname = ''
       model.set '_info.song.songname', songname
@@ -189,5 +193,9 @@ functions.song = (page, model, params) ->
     model.set '_info.stTitle', "#{songname}"
 
     page.render 'index'
+
+audioOnly = (videos, bool) ->
+  videos.filter (el) ->
+    audioOnly == bool
 
 module.exports = functions
