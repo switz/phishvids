@@ -1,5 +1,5 @@
-{ view } = require './index'
-{ addZero } = require '../lib/utils'
+{ view } = require './index.coffee'
+{ addZero } = require '../lib/utils.coffee'
 
 # View Functions
 view.fn 'addZero', (num) -> addZero num

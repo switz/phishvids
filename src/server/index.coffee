@@ -29,6 +29,11 @@ store.on 'bundle', (browserify) ->
   # Add support for directly requiring coffeescript in browserify bundles
   browserify.transform coffeeify
 
+store.shareClient.use "connect", (shareRequest, next) ->
+  req = shareRequest.req
+  shareRequest.agent.connectSession = req.session  if req
+  next()
+
 ONE_DAY = 1000 * 60 * 60 * 24
 root = path.dirname path.dirname __dirname
 publicPath = path.join root, 'public'
@@ -40,6 +45,7 @@ mongo_store = new MongoStore url: process.env.pv_uri, ->
     .use(express.static publicPath)
     # Gzip dynamically rendered content
     .use(express.compress())
+    .use(app.scripts store)
 
     # Uncomment to add form data parsing support
     .use(express.bodyParser())
@@ -48,6 +54,10 @@ mongo_store = new MongoStore url: process.env.pv_uri, ->
     # Uncomment and supply secret to add Derby session handling
     # Derby session middleware creates req.session and browser channel sessions
     .use(express.cookieParser())
+    .use(express.session
+      secret: process.env.SESSION_SECRET || 'YOUR SECRET HERE'
+      store: new MongoStore(url: process.env.pv_uri, safe: true, auto_reconnect: true)
+    )
     .use(racerBrowserChannel store)
     # Adds req.getModel method
     .use(store.modelMiddleware())

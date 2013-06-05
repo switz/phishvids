@@ -1,12 +1,12 @@
-expressApp = require('./index').expressApp
+expressApp = require('./index.coffee').expressApp
 mongoose = require 'mongoose'
 sanitize = require('validator').sanitize
-config = require './config'
+config = require './config.coffee'
 
-YoutubeAPI = require '../api/external_apis/youtube'
-extractDate = require '../lib/extract_date'
+YoutubeAPI = require '../api/external_apis/youtube.coffee'
+extractDate = require '../lib/extract_date.coffee'
 
-{ isEmptyObject } = require '../lib/utils'
+{ isEmptyObject } = require '../lib/utils.coffee'
 
 db = mongoose.createConnection(process.env.pv_uri);
 

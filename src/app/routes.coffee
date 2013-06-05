@@ -1,5 +1,5 @@
-{ get } = require './index'
-controller = require './controller'
+{ get } = require './index.coffee'
+controller = require './controller.coffee'
 
 ## ROUTES ##
 

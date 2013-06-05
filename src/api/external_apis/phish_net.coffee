@@ -1,11 +1,11 @@
-API_KEY = require('../config').phishnetAPI
+API_KEY = require('../config.coffee').phishnetAPI
 API_URL = 'api.phish.net/api.js'
 
 API_FORMAT  = 'json'
 API_VERSION = '2.0'
 
-Request = require '../../lib/request'
-{ toParam, onClient } = require '../../lib/utils'
+Request = require '../../lib/request.coffee'
+{ toParam, onClient } = require '../../lib/utils.coffee'
 
 phishNetRequestUrl = (params) ->
   params.apikey = API_KEY

@@ -1,24 +1,23 @@
 async = require 'async'
-app = require '../app'
-config = require './config'
-{ view, ready } = require './index'
-{ jsonToSetlist, fixSegue, getShow, compareTitleToSetlist } = require '../lib/show_utils'
-{ addZero } = require '../lib/utils'
+config = require './config.coffee'
+{ view, ready } = require './index.coffee'
+{ jsonToSetlist, fixSegue, getShow, compareTitleToSetlist } = require '../lib/show_utils.coffee'
+{ addZero } = require '../lib/utils.coffee'
 
 #############
 ## Ready
 #############
 
 ready (model) ->
-  month = model.at '_page.month'
-  day = model.at '_page.day'
-  year = model.at '_page.year'
-  number = model.at '_page.number'
-  newVideo = model.at '_page.newVideo'
-  validateVideos = model.at '_page.validateVideos'
-  scroll = model.at '_page.scroll'
+  month = model.at '_info.month'
+  day = model.at '_info.day'
+  year = model.at '_info.year'
+  number = model.at '_info.number'
+  newVideo = model.at '_info.newVideo'
+  validateVideos = model.at '_info.validateVideos'
+  scroll = model.at '_info.scroll'
 
-  model.setNull '_page.years', config.YEAR_ARRAY
+  model.setNull '_info.years', config.YEAR_ARRAY
 
   @on 'render', (ctx) ->
     PhishVids()
@@ -72,7 +71,7 @@ ready (model) ->
             shows.push show
             if i is data.length
               $('.add-form-container').slideUp()
-              model.set '_page.isFront', false
+              model.set '_info.isFront', false
               model.del m for m in ['_month','_day','_number','_show','_song','_tiph','_year','_shows','_about','_validateVideos']
               validateVideos.set
                 data: shows
@@ -81,7 +80,7 @@ ready (model) ->
                 days: [1..31]
       # Error
       error: (jqXHR, textStatus, errorThrown) ->
-        model.set '_page.message',
+        model.set '_info.message',
           msg: jqXHR.responseText.err
 
   @confirm = (e, el, next) ->
@@ -246,17 +245,17 @@ ready (model) ->
     _gaq.push(['_trackEvent', 'User', 'Stability', 'Disconnected', 1])
     # Any path name that starts with an underscore is private to the current
     # client. Nothing set under a private path is synced back to the server.
-    model.set '_page.stopped', true
+    model.set '_info.stopped', true
 
   do @start = ->
-    model.set '_page.stopped', false
+    model.set '_info.stopped', false
 
-  model.set '_page.showReconnect', true
+  model.set '_info.showReconnect', true
   @connect = ->
     _gaq.push(['_trackEvent', 'User', 'Stability', 'Reconnected', 1])
     # Hide the reconnect link for a second after clicking it
-    model.set '_page.showReconnect', false
-    setTimeout (-> model.set '_page.showReconnect', true), 1000
+    model.set '_info.showReconnect', false
+    setTimeout (-> model.set '_info.showReconnect', true), 1000
     model.socket.socket.connect()
 
   @reload = -> window.location.reload()

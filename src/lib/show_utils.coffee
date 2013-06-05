@@ -1,4 +1,4 @@
-{ addZero } = require './utils'
+{ addZero } = require './utils.coffee'
 
 jsonToSetlist = (json, blue) ->
   # Each song recieves an incremented number
@@ -52,7 +52,7 @@ fixSegue = (arr) ->
   arr
 
 getShow = (show, callback) ->
-  PhishAPI = require '../api/external_apis/phish_net'
+  PhishAPI = require '../api/external_apis/phish_net.coffee'
   if show.showDate is undefined
     return callback {error:'No Date'}, show
 

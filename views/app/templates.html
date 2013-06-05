@@ -6,22 +6,22 @@
       </li>
       <li class=search-container>
         <form onsubmit='return false;'>
-          <input type="text" id="st-search-input" class="st-search-input" value={_page.searchInput} autocomplete=off />
+          <input type="text" id="st-search-input" class="st-search-input" value={_info.searchInput} autocomplete=off />
         </form>
       </li>
     </ul>
     <ul class=right>
-      <li class="{#if _page.about}active{/if}">
-        <a class="{#if _page.about}active{/if}" href="/about">ABOUT</a>
+      <li class="{#if _info.about}active{/if}">
+        <a class="{#if _info.about}active{/if}" href="/about">ABOUT</a>
       </li>
-      <li class="{#if _page.tiph}active{/if}">
-        <a class="{#if _page.tiph}active{/if}" href="/tiph">TIPH</a>
+      <li class="{#if _info.tiph}active{/if}">
+        <a class="{#if _info.tiph}active{/if}" href="/tiph">TIPH</a>
       </li>
       <li class=add-container>
         <a href="#" x-bind=click:addClick>ADD</a>
         <div class=add-form-container>
           <form x-bind=submit:add id=addVideo>
-            <textarea name=video rows=10 placeholder="http://www.youtube.com/watch?v=...                                                http://www.youtube.com/watch?v=...                                                http://www.youtube.com/watch?v=...                                                http://www.youtube.com/watch?v=...">{_page.newVideo}</textarea><br />
+            <textarea name=video rows=10 placeholder="http://www.youtube.com/watch?v=...                                                http://www.youtube.com/watch?v=...                                                http://www.youtube.com/watch?v=...                                                http://www.youtube.com/watch?v=...">{_info.newVideo}</textarea><br />
             <button class=btn type=submit>Bag It!</button>
             <button class=btn type=submit>Tag It!</button>
           </form>
@@ -36,29 +36,29 @@
     <div id="year-list-container">
       <div class=ul-header>Choose a Year</div>
       <ul class=yearList>
-        {{#each _page.years as :year}}
-          <li><a class="year blue {{:year}} {{equal(:year,_page.year)}}" href=/{:year}>{{:year}}</a></li>
+        {{#each _info.years as :year}}
+          <li><a class="year blue {{:year}} {{equal(:year,_info.year)}}" href=/{:year}>{{:year}}</a></li>
         {{/each}}
       </ul>
     </div>
   </div>
 
 <year:>
-  {#if _page.year}
+  {#if _info.year}
     <div class=span3>
       <div id="year-container">
-        <div class=ul-header>{_page.year}</div>
+        <div class=ul-header>{_info.year}</div>
         <ul class=year>
-        {#if _page.shows.message}
-          <li class="{_shows.class}">{_page.shows.message}</li>
-          {#if _page.shows.error}
+        {#if _info.shows.message}
+          <li class="{_shows.class}">{_info.shows.message}</li>
+          {#if _info.shows.error}
             <li>Please Refresh or try again later</li>
             <li>If issue persists, <a href="mailto:help@phishvids.com" class=clear>email us</a>.</li>
           {/if}
         {else}
-          {{#each _page.shows as :show}}
+          {{#each _info.shows as :show}}
             <li>
-              <a class="show{{#if :show.hasVideos}} blue{{/if}} {{equal(addZero(:show.month),_page.month)}}{{equal(addZero(:show.day),_page.day)}}" href="/{{_page.year}}/{{addZero(:show.month)}}/{{addZero(:show.day)}}">
+              <a class="show{{#if :show.hasVideos}} blue{{/if}} {{equal(addZero(:show.month),_info.month)}}{{equal(addZero(:show.day),_info.day)}}" href="/{{_info.year}}/{{addZero(:show.month)}}/{{addZero(:show.day)}}">
                 <span class=date>{{:show.month}}/{{addZero(:show.day)}}</span>
                 &nbsp;
                 <span class=venue>{{:show.venue}}</span>
@@ -66,7 +66,7 @@
             </li>
           {{/each}}
           <li>
-            <a href="http://phish.net/setlists/{_year}.html" target="_page.blank">Open on Phish.net</a>
+            <a href="http://phish.net/setlists/{_year}.html" target="_info.blank">Open on Phish.net</a>
           </li>
         {/if}
         </ul>
@@ -75,12 +75,12 @@
   {/if}
 
 <show:>
-  {#if _page.day}
+  {#if _info.day}
     <div class=span3>
       <div id="show-container">
-        <div class=ul-header>{_month}/{_day} {_page.venue}</div>
+        <div class=ul-header>{_month}/{_day} {_info.venue}</div>
         <ul class=show>
-          {#with _page.show as :show}
+          {#with _info.show as :show}
             {#if empty(:show.setlist)}
               <li class=error>The database could not be reached. Please try again later.</li>
             {else}
@@ -89,7 +89,7 @@
                 {#each :set.songs as :song}
                   {#if :song.name}
                     <li>
-                      <a class="song {#if contains(:song.number, _page.blue)}blue{/if} {equal(:song.number,_page.number)}" href="/{_year}/{_month}/{_page.day}/{:song.number}">
+                      <a class="song {#if contains(:song.number, _info.blue)}blue{/if} {equal(:song.number,_info.number)}" href="/{_year}/{_month}/{_info.day}/{:song.number}">
                         {:song.name}{#if :song.sup}<sup>[{:song.sup}]</sup>{/if} <span class=segue>{:song.segue}</span>
                       </a>
                     </li>
@@ -104,7 +104,7 @@
                 </li>
               {/if}
               <li>
-                <a href="http://phish.net/setlists/?d={_year}-{_month}-{_page.day}" target=_blank>Open on Phish.net</a>
+                <a href="http://phish.net/setlists/?d={_year}-{_month}-{_info.day}" target=_blank>Open on Phish.net</a>
               </li>
             {/if}
           {/with}
@@ -114,7 +114,7 @@
   {/if}
 
 <song:>
-  {#with _page.song as :song}
+  {#with _info.song as :song}
     {#if :song.songname}
       <div class=span3>
         <div id="song-container">
@@ -160,7 +160,7 @@
 
 <validate:>
   <div class=validate>
-    {#each _page.validateVideos.data as :video}
+    {#each _info.validateVideos.data as :video}
       <div class=validate-video>
         <h3>{:video.title}</h3>
          <div class="setlist-approval-container left">
@@ -192,17 +192,17 @@
         <div class=clear-float></div>
         <div class=date-approval-container>
           <select name=month i={:video.i} x-bind=change:update>
-            {#each _page.validateVideos.months as :month}
+            {#each _info.validateVideos.months as :month}
               <option value="{:month}" selected="{equal(:month, :video.showDate.month)}">{:month}</option>
             {/each}
           </select> /
           <select name=day i={:video.i} x-bind=change:update>
-            {#each _page.validateVideos.days as :day}
+            {#each _info.validateVideos.days as :day}
               <option value="{:day}" selected="{equal(:day, :video.showDate.day)}">{:day}</option>
             {/each}
           </select> /
           <select name=year class=year i={:video.i} x-bind=change:update>
-            {#each _page.validateVideos.years as :year}
+            {#each _info.validateVideos.years as :year}
               <option value="{:year}" selected="{equal(:year, :video.showDate.year)}">{:year}</option>
             {/each}
           </select>
@@ -221,11 +221,11 @@
   <div class=page>
     <div id="tiph-container">
       <h2>Today In Phish History</h2>
-        {#if _page.tiph.err}
+        {#if _info.tiph.err}
           <br>
-          <h3 class=err>{_page.tiph.message}</h3>
+          <h3 class=err>{_info.tiph.message}</h3>
         {else}
-          {#each _page.tiph as :video}
+          {#each _info.tiph as :video}
             <div class=tiph>
               <a x-bind=click:expand>
                 {:video.name}

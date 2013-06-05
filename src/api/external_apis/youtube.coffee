@@ -3,8 +3,8 @@ API_URL = 'gdata.youtube.com/feeds/api/videos'
 API_FORMAT  = 'json'
 API_VERSION = '2'
 
-Request = require '../../lib/request'
-{ toParam } = require '../../lib/utils'
+Request = require '../../lib/request.coffee'
+{ toParam } = require '../../lib/utils.coffee'
 
 youtubeRequestUrl = (id) ->
   params =
