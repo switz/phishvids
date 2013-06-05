@@ -19,7 +19,7 @@ ready (model) ->
 
   model.setNull '_info.years', config.YEAR_ARRAY
 
-  @on 'render', (ctx) ->
+  model.on 'render', (ctx) ->
     PhishVids()
     _gaq.push ['_trackPageview', window.location.pathname]
 

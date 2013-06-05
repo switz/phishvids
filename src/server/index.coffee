@@ -29,6 +29,12 @@ store.on 'bundle', (browserify) ->
   # Add support for directly requiring coffeescript in browserify bundles
   browserify.transform coffeeify
 
+createUserId = (req, res, next) ->
+  model = req.getModel()
+  userId = req.session.userId ||= model.id()
+  model.set '_session.userId', userId
+  next()
+
 store.shareClient.use "connect", (shareRequest, next) ->
   req = shareRequest.req
   shareRequest.agent.connectSession = req.session  if req
@@ -41,11 +47,16 @@ publicPath = path.join root, 'public'
 mongo_store = new MongoStore url: process.env.pv_uri, ->
   expressApp
     .use(express.favicon("#{publicPath}/img/favicon.ico"))
-    # Gzip static files and serve from memory
-    .use(express.static publicPath)
     # Gzip dynamically rendered content
     .use(express.compress())
     .use(app.scripts store)
+
+    # Gzip static files and serve from memory
+    .use(express.static publicPath)
+
+    .use(racerBrowserChannel store)
+    # Adds req.getModel method
+    .use(store.modelMiddleware())
 
     # Uncomment to add form data parsing support
     .use(express.bodyParser())
@@ -58,9 +69,7 @@ mongo_store = new MongoStore url: process.env.pv_uri, ->
       secret: process.env.SESSION_SECRET || 'YOUR SECRET HERE'
       store: new MongoStore(url: process.env.pv_uri, safe: true, auto_reconnect: true)
     )
-    .use(racerBrowserChannel store)
-    # Adds req.getModel method
-    .use(store.modelMiddleware())
+    .use(createUserId)
     # Creates an express middleware from the app's routes
     .use(app.router())
     .use(expressApp.router)
