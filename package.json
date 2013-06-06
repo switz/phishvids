@@ -17,7 +17,8 @@
     "redis": "~0.8.3",
     "coffeeify": "~0.5.1",
     "racer-browserchannel": "~0.1.0",
-    "share": "git://github.com/share/ShareJS.git#rewrite"
+    "share": "git://github.com/share/ShareJS.git#rewrite",
+    "racer-util": "0.0.5"
   },
   "private": true,
   "devDependencies": {

@@ -35,11 +35,6 @@ createUserId = (req, res, next) ->
   model.set '_session.userId', userId
   next()
 
-store.shareClient.use "connect", (shareRequest, next) ->
-  req = shareRequest.req
-  shareRequest.agent.connectSession = req.session  if req
-  next()
-
 ONE_DAY = 1000 * 60 * 60 * 24
 root = path.dirname path.dirname __dirname
 publicPath = path.join root, 'public'
@@ -77,7 +72,7 @@ mongo_store = new MongoStore url: process.env.pv_uri, ->
 
   routes = require './routes'
 
-  #queries = require './queries'
+  queries = require './queries'
 
 # Infinite stack trace
 Error.stackTraceLimit = Infinity
