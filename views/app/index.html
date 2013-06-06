@@ -1,17 +1,17 @@
 <Title:>
-  {_title}
+  {_info.title}
 
 <import: src=templates>
 
 <Head:>
   <meta name=description content="Phish Videos sorted by year, show, and setlist. Simple." />
-  {{#if _stTitle}}
-    <meta property='st:title' content="{{_stTitle}}" />
+  {{#if _info.stTitle}}
+    <meta property='st:title' content="{{_info.stTitle}}" />
   {{/if}}
-  {{#if _song.songname}}
-    <meta id='stsectionshow' property='st:section' content="{{_month}}/{{_day}}/{{_year}} {{_venue}}" />
-  {{else if _venue}}
-    <meta id='stsectionvenue' property='st:section' content="{{_venue}}" />
+  {{#if _info.song.songname}}
+    <meta id='stsectionshow' property='st:section' content="{{_info.month}}/{{_info.day}}/{{_info.year}} {{_info.venue}}" />
+  {{else if _info.venue}}
+    <meta id='stsectionvenue' property='st:section' content="{{_info.venue}}" />
   {{/if}}
 
 <Body:>
@@ -22,9 +22,9 @@
       <div class=row-fluid>
         {#if _validateVideos}
           <app:templates:validate>
-        {else if _tiph}
+        {else if _info.tiph}
           <app:templates:tiph>
-        {else if _about}
+        {else if _info.about}
           <app:templates:about>
         {else}
           <app:templates:yearList>

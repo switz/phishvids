@@ -1,5 +1,5 @@
 config = require './config.coffee'
-{ onServer, addZero, removeDuplicates } = require '../lib/utils.coffee'
+{ onServer, addZero, removeDuplicates, audioOnly } = require '../lib/utils.coffee'
 { jsonToSetlist, fixSegue, getShow, compareTitleToSetlist } = require '../lib/show_utils.coffee'
 
 PhishAPI = require '../api/external_apis/phish_net.coffee'
@@ -73,7 +73,6 @@ functions.year = (page, model, params, callback) ->
 
   query = model.query('years', { year })
   query.fetch (err) ->
-    console.log err, err.stack if err
     if err then throw new Error "Year query error: #{err}"
 
     yearModel = query.ref '_year.data'
@@ -128,20 +127,18 @@ functions.show = (page, model, params, callback) ->
 
     model.set '_info.venue', setlistModelGet.venue
 
-    query2 = model.query('videos', { showid, approved })
+    query2 = model.query 'videos', { showid, approved }
     query2.fetch (err) ->
       if err then throw new Error "Show Video query error: #{err}"
 
       videoModel = query2.ref '_setlist.video.data'
       videoModelGet = videoModel.get()
-      console.log videoModelGet
 
       # Set related local models
       if videoModelGet and setlistModelGet
         blue = {}
         for video in videoModelGet
-          continue unless video
-          blue[addZero video.number] = true
+          blue[addZero(video.number)] = true
 
         model.set '_info.blue', blue
         show.set setlistModelGet
@@ -176,15 +173,14 @@ functions.song = (page, model, params) ->
     videoModel = query.ref '_video.data'
     # Get video model from mongodb
     videoModelGet = videoModel.get()
-    console.log 'videos', videoModelGet
 
     if videoModelGet?.length > 0
       songname = videoModelGet[0].songname
       model.set '_info.song.songname', songname
       songname += ' '
       # Set local videos model to videos without audio
-      model.set '_info.song.videos', audioOnly videoModelGet, false
-      model.set '_info.song.audioVideos', audioOnly videoModelGet, true
+      model.set '_info.song.videos', audioOnly(videoModelGet, false)
+      model.set '_info.song.audioVideos', audioOnly(videoModelGet, true)
     else
       songname = ''
       model.set '_info.song.songname', songname
@@ -193,9 +189,5 @@ functions.song = (page, model, params) ->
     model.set '_info.stTitle', "#{songname}"
 
     page.render 'index'
-
-audioOnly = (videos, bool) ->
-  videos.filter (el) ->
-    audioOnly == bool
 
 module.exports = functions

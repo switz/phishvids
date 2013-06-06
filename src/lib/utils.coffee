@@ -8,7 +8,7 @@ onClient = ->
 
 toParam = (object) ->
   params = []
-  for own key, val of object
+  for ownkey,  val of object
     params.push("#{ key }=#{ val }")
 
   params.join('&')
@@ -36,12 +36,8 @@ isEmptyObject = (obj) ->
     return false
   return true
 
-module.exports =
-  {
-    onServer
-    onClient
-    toParam
-    addZero
-    removeDuplicates
-    isEmptyObject
-  }
+audioOnly = (videos, bool) ->
+  videos.filter (el) ->
+    el.audioOnly == bool
+
+module.exports = { onServer, onClient, toParam, addZero, removeDuplicates, isEmptyObject, audioOnly }

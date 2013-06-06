@@ -19,7 +19,7 @@ ready (model) ->
 
   model.setNull '_info.years', config.YEAR_ARRAY
 
-  model.on 'render', (ctx) ->
+  app.enter '*', ->
     PhishVids()
     _gaq.push ['_trackPageview', window.location.pathname]
 
@@ -247,7 +247,7 @@ ready (model) ->
     # client. Nothing set under a private path is synced back to the server.
     model.set '_info.stopped', true
 
-  app.fn 'start', ->
+  do ->
     model.set '_info.stopped', false
 
   model.set '_info.showReconnect', true

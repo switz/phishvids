@@ -78,7 +78,7 @@
   {#if _info.day}
     <div class=span3>
       <div id="show-container">
-        <div class=ul-header>{_info.month}/{_day} {_info.venue}</div>
+        <div class=ul-header>{_info.month}/{_info.day} {_info.venue}</div>
         <ul class=show>
           {#with _info.show as :show}
             {#if empty(:show.setlist)}
