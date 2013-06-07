@@ -186,6 +186,7 @@ controller.status = (req, res) ->
   obj =
     status: 'up'
     easteregg: false
+    version: 'Running on Derby 0.5.x'
   if req.query.easteregg
     obj.easteregg = true
     obj.icculus = 'Read the fucking book.'

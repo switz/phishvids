@@ -5,6 +5,7 @@ derby = require 'derby'
 racer = require 'racer'
 liveDbMongo = require 'livedb-mongo'
 coffeeify = require 'coffeeify'
+redis = require 'redis'
 racerBrowserChannel = require 'racer-browserchannel'
 MongoStore = require('connect-mongo')(express)
 app = require '../app'
@@ -16,9 +17,13 @@ expressApp = express()
 server = module.exports = http.createServer expressApp
 module.exports.expressApp = expressApp
 
-redis = require('redis').createClient()
-
-redis.select 1
+if process.env.REDIS_URI
+  redisUrl = require('url').parse process.env.REDIS_URI
+  redis = redis.createClient redisUrl.port, redisUrl.hostname
+  redis.auth redisUrl.auth.split(":")[1]
+else
+  redis = redis.createClient()
+  redis.select 1
 
 store = module.exports.pvStore = derby.createStore
   listen: server
